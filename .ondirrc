@@ -1,0 +1,29 @@
+
+enter /localhome/tzhou/([^/]+)
+	TOPLEVEL=`git rev-parse --show-toplevel`
+	export ROOT=$TOPLEVEL
+        export CSEARCHINDEX="$HOME/work/.index"
+	git status -sb
+	echo "\n \033[0;35m Changed ROOT to ${TOPLEVEL} ... \033[0m \n"
+
+enter /localhome/tzhou/([^/]+)/src/software/graph_compiler
+	conda activate ttc
+	echo "\n \033[0;35m Conda ttc activated  ... \033[0m \n"
+
+leave /localhome/tzhou/([^/]+)/src/software/graph_compiler
+	conda deactivate
+	echo "\n \033[0;35m Conda deactivated  ... \033[0m \n"
+
+enter /localhome/tzhou/([^/]+)/src/software/graph_compiler_tools/reportify
+	conda activate reportify
+	echo "\n \033[0;35m Conda reportify activated  ... \033[0m \n"
+
+leave /localhome/tzhou/([^/]+)/src/software/graph_compiler_tools/reportify
+	conda deactivate
+	echo "\n \033[0;35m Conda deactivated  ... \033[0m \n"
+
+leave /home/tzhou
+	TOPLEVEL=$HOME
+	export ROOT=$TOPLEVEL
+        export CSEARCHINDEX="$HOME/.index"
+	echo "\n \033[0;35m Exiting home/tzhou ... \033[0m \n"

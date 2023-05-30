@@ -17,7 +17,7 @@
 	process = git-lfs filter-process
 	required = true
 [core]
-	editor = vim
+	editor = emacs
 [safe]
 	directory = /proj_sw/tools/interactive-run-docker
 [credential]

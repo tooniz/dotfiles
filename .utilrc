@@ -1,0 +1,31 @@
+######################
+# Alias
+######################
+
+# So you can quickly print a column by piping through one of the awkN-s
+alias -- awk1='awk "{ print \$1 }"'
+alias -- awk2='awk "{ print \$2 }"'
+alias -- awk3='awk "{ print \$3 }"'
+alias -- awk4='awk "{ print \$4 }"'
+
+alias -- gs='git status'
+alias -- g-extra='git status -s | grep -e "??" | awk2'
+alias -- g-root='git rev-parse --show-toplevel'
+alias -- g-parent='git log --pretty=%P -n 1'
+alias -- g-which-branch='git branch -a --contains'
+
+######################
+# Applications
+######################
+
+alias -- profile-emacs='emacs -Q -l ~/emacs.d/profile-dotemacs/profile-dotemacs.el --eval "(setq profile-dotemacs-file (setq load-file-name \"~/emacs\"))" -f profile-dotemacs'
+e   () { emacsclient > /dev/null 2>&1 "$@" & }
+en  () { emacs -nw "$@" }
+
+pie () { /usr/bin/perl -p -i -e "s/$1/$2/g" $3 }
+prm () { /usr/bin/perl -ni -e "print unless /$1/" $2 }
+ansi_colors () { for (( i = 30; i < 38; i++ )); do echo -e "\033[0;"$i"m Normal: (0;$i); \033[1;"$i"m Light: (1;$i)"; done }
+
+fixws() {
+  (export GIT_EDITOR=: && git -c apply.whitespace=fix add -ue .) && git checkout . && git reset
+}

@@ -1,0 +1,36 @@
+######################
+# TensTorrent
+######################
+export USER_DEV=/proj_sw/user_dev/$USER/
+export ALL_BAZEL=1
+export VCD_NOFPU=1 # disable vcd dump for FPU
+export FAST_VERSIM=3 # optimized for runtime
+export DEVICE_RUNNER=Silicon
+export ARCH_NAME=wormhole_b0
+export SKIP_BBE_UPDATE=1
+export TT_BACKEND_PROFILER=1
+
+alias -- jp='cd $ROOT'
+alias -- x='exit'
+alias -- rst='find . -name "reset.sh" | sh'
+alias -- ird='python3 $USER_DEV/ird/interactive-run-docker.py'
+
+alias -- dbg='export BACKEND_CONFIG=debug; export CONFIG=debug'
+alias -- dbgoff='unset BACKEND_CONFIG; unset CONFIG'
+alias -- dock='docker exec -it --user tzhou special-tzhou zsh'
+alias -- deck='sudo service docker start && sudo chmod 666 /var/run/docker.sock'
+
+lc() {
+    sudo apt-get install -y locales
+    sudo localedef -v -c -i en_US -f UTF-8 en_US.UTF-8
+}
+
+tinytensor() {
+    export ROOT=~/proj_sw/tinytensor
+    export PYTHONPATH=$ROOT:$ROOT/src:$ROOT/tests:$ROOT/bbe/build/obj/py_api:$ROOT/bbe/py_api/tests:$PYTHONPATH
+    export BUDA_HOME=$ROOT/bbe
+    export CONFIG=release
+    lc; cd $ROOT
+}
+
+dbg

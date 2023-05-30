@@ -1,0 +1,9 @@
+#!/usr/bin/env bash
+
+TOPLEVEL=`git rev-parse --show-toplevel`
+export ROOT=$TOPLEVEL
+git status -sb
+echo "\n Environment Variables:"
+echo " - ARCH_NAME=$ARCH_NAME"
+echo " - CONFIG=$CONFIG"
+echo "\n \033[0;35m Changed ROOT to ${TOPLEVEL} ... \033[0m \n"

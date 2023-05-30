@@ -1,17 +1,24 @@
+[user]
+	email = tzhou@tenstorrent.com
+	name = Tony Zhou
+[alias]
+	lga = !"git log-graph-specific --all"
+	lg  = !"git log-graph-specific"
+	log-graph-specific = log --graph --abbrev-commit --decorate --format=format:'%C(bold red)%h%C(reset) - %C(bold green)(%ar)%C(reset) %C(white)%s%C(reset) %C(dim white)- %an%C(reset)%C(auto)%d%C(reset)'
+	cf = clang-format-7 --binary /usr/bin/clang-format-7
+	co = checkout
+	cob = checkout -b
+	fm = fetch origin master:master
+[pull]
+	rebase = true
 [filter "lfs"]
 	clean = git-lfs clean -- %f
 	smudge = git-lfs smudge -- %f
 	process = git-lfs filter-process
 	required = true
-[user]
-	email = tzhou@tenstorrent.com
-	name = tzhou
 [core]
-	editor = emacs -nw
-[alias]
-    lga = !"git log-graph-specific --all"
-    lg  = !"git log-graph-specific"
-    log-graph-specific = log --graph --abbrev-commit --decorate --format=format:'%C(bold red)%h%C(reset) - %C(bold green)(%ar)%C(reset) %C(white)%s%C(reset) %C(dim white)- %an%C(reset)%C(auto)%d%C(reset)'
-	cf = clang-format-7 --binary /usr/bin/clang-format-7
-[pull]
-	rebase = true
+	editor = vim
+[safe]
+	directory = /proj_sw/tools/interactive-run-docker
+[credential]
+	helper = cache

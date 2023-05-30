@@ -116,7 +116,7 @@ source $ZSH/oh-my-zsh.sh
 ######################
 
 # Add user bin to PATH
-export PATH="$HOME/bin:$PATH"
+export PATH="$HOME/.local/bin:$HOME/bin:$PATH"
 
 # Add coreutils to PATH
 export PATH="/usr/local/opt/coreutils/libexec/gnubin:$PATH"
@@ -125,31 +125,26 @@ export PATH="/usr/local/opt/coreutils/libexec/gnubin:$PATH"
 export PATH="$HOME/.linuxbrew/bin:$PATH"
 
 # Add user workspace to ROOT
-export ROOT="/localhome/tzhou/tensix"
+export ROOT="/proj_sw/$USER"
 
 # Tell less not to paginate if less than a page
 export LESS="-F -X $LESS"
+
+# Default to /usr/bin first
+export PATH="/usr/bin/:$PATH"
 
 # requires % <brew install> coreutils
 # to get GNU ls, aka gls.
 export LS_COLORS='no=00;37:fi=00;37:di=01;97:ln=01;33:pi=40;34:so=00;34:bd=40;34;01:cd=40;34;01:or=01;31:mi=37;41:ex=00;32:*.cmd=00;32:*.exe=00;32:*.com=00;32:*.btm=00;32:*.bat=00;32:*.sh=00;32:*.csh=00;32:*.tar=00;31:*.tgz=00;31:*.arj=00;31:*.taz=00;31:*.lzh=00;31:*.zip=00;31:*.z=00;31:*.Z=00;31:*.gz=00;31:*.bz2=00;31:*.bz=00;31:*.tz=00;31:*.rpm=00;31:*.cpio=00;31:*.jpg=00;35:*.gif=00;35:*.bmp=00;35:*.xbm=00;35:*.xpm=00;35:*.png=00;35:*.tif=00;35:*.pl=00;36:*.gv=00;36:*.svh=00;36:*.vh=00;36:*.sv=00;36:*.v=00;36:*.ncf=00;33:*.edf=00;33:*.ucf=00;33:*.log=00;35:*.vcd=00;31:*.fsdb=00;31:'
 
-# Go Environment
-#export GOPATH="${HOME}/.go"
-#export GOROOT="$(brew --prefix golang)/libexec"
-#export PATH="$PATH:${GOPATH}/bin:${GOROOT}/bin"
-
-# Codesearch
-export CSEARCHINDEX="$HOME/.index"
-
-# Custom envvars
-export ARCHIVE="$HOME/work/archive"
-export ARTIFACTS="$HOME/work/artifacts"
+# Set shared user dev
+export USER_DEV=/proj_sw/user_dev/$USER/
 
 # Conda
-export ANACONDA_PATH=/opt/miniconda
+export ANACONDA_PATH=$USER_DEV/miniconda3/
+emulate bash -c '. $ANACONDA_PATH/etc/profile.d/conda.sh'
 source $ANACONDA_PATH/etc/profile.d/conda.sh
-export CONDA_ENVS_PATH=$HOME/conda-envs
+export CONDA_ENVS_PATH=$HOME/miniconda3/envs/
 
 # FZF in Tmux
 export FZF_TMUX=1
@@ -176,78 +171,93 @@ colors
 # Alias
 ######################
 alias -- c='cd ..'
-alias -- exe='x'
 alias -- more='less'
 alias -- sz='source ~/.zshrc'
-alias -- l.='ls -d .* --color=tty'
+alias -- l.='ls -d .* -l --color=tty'
 alias -- ll='ls -l --color=tty'
 alias -- ls='ls --color=tty'
-alias -- gh='history | egrep '
-alias -- cat='bat'
+
+# So you can quickly print a column by piping through one of the awkN-s
+alias -- awk1='awk "{ print \$1 }"'
+alias -- awk2='awk "{ print \$2 }"'
+alias -- awk3='awk "{ print \$3 }"'
+alias -- awk4='awk "{ print \$4 }"'
+
+alias -- gs='git status'
+alias -- g-extra='git status -s | grep -e "??" | awk2'
+alias -- g-root='git rev-parse --show-toplevel'
+alias -- g-parent='git log --pretty=%P -n 1'
+alias -- g-which-branch='git branch -a --contains'
 
 ######################
 # Applications
 ######################
-alias -- stem='export ROOT=`pwd`'
-#alias -- emacs='/Applications/Emacs.app/Contents/MacOS/Emacs'
-#alias -- gtkwave='/Applications/gtkwave.app/Contents/Resources/bin/gtkwave'
-alias -- cs='csearch'
-alias -- csg='CSEARCHINDEX="$HOME/work/.csearch/grayskull_rtl.index" csearch'
-alias -- vcdparse='$ROOT/bin/vcd/vcdparse.py'
-alias -- run.log='find . -name "run.log"'
 alias -- profile-emacs='emacs -Q -l ~/emacs.d/profile-dotemacs/profile-dotemacs.el --eval "(setq profile-dotemacs-file (setq load-file-name \"~/emacs\"))" -f profile-dotemacs'
+alias -- cat='bat'
 
 e   () { emacsclient > /dev/null 2>&1 "$@" & }
 en  () { emacs -nw "$@" }
+lc  () { sudo apt-get install -y locales; sudo localedef -v -c -i en_US -f UTF-8 en_US.UTF-8 }
+j   () { cd $USER_DEV/$1 }
 
 pie () { /usr/bin/perl -p -i -e "s/$1/$2/g" $3 }
 prm () { /usr/bin/perl -ni -e "print unless /$1/" $2 }
 ansi_colors () { for (( i = 30; i < 38; i++ )); do echo -e "\033[0;"$i"m Normal: (0;$i); \033[1;"$i"m Light: (1;$i)"; done }
-pingme () { export title=$@ && osascript -e "display notification \"$PWD\" with title \"$title Complete\"" }
 
 ######################
 # Prompt
 ######################
-NEWLINE=$'\n'
-
-#function precmd {
-#    PROMPT="%{$fg[cyan]%}@ %~%{$reset_color%} $(git_prompt_info) ${NEWLINE}${ret_status} %{$reset_color%}"
-#}
 
 ######################
 # TensTorrent
 ######################
-
-#export MP=2 # defult number of processes to run for zversim
-#export CKDEBUG=1 # enable fwlog
+export ALL_BAZEL=1
 export VCD_NOFPU=1 # disable vcd dump for FPU
-#export TRACE_FST=1 # trace dump fst instead of vcd
 export FAST_VERSIM=3 # optimized for runtime
+export DEVICE_RUNNER=Silicon
+export ARCH_NAME=grayskull
+export CONFIG=debug
+export BACKEND_CONFIG=debug
+export BACKEND_PROFILER_EN=1
+export SKIP_BBE_UPDATE=1
 
 alias -- jp='cd $ROOT'
-alias -- jpgc='cd $ROOT/src/software/graph_compiler'
-alias -- jptests='cd $ROOT/src/hardware/tb_tensix/tests'
-alias -- jpvcore='cd $ROOT/src/t6ifc/versim-core'
-alias -- jptdma='cd $ROOT/src/hardware/tdma/tb'
-alias -- jpfpu='cd $ROOT/src/hardware/fpu/tb/tb_fp_lane_lb'
-alias -- jpzver='cd $ROOT/testing/tests/zversim/tb-stress'
+alias -- x='exit'
+alias -- rst='find . -name "reset.sh" | sh'
+alias -- ird='python3 $USER_DEV/ird/interactive-run-docker.py'
 
-alias -- unttx='rm -rf ttx && mkdir ttx && cp *.ttx ttx && cd ttx && unzip *.ttx'
-alias -- unart='cd $ARTIFACTS && mkdir `date +"%m%d%H%M"` && cd `date +"%m%d%H%M"` && mv ~/Downloads/artifacts.zip ./ && unzip artifacts.zip'
-alias -- unout='pwd | pbcopy; cd $ARTIFACTS && mkdir `date +"%m%d%H%M"` && cd `date +"%m%d%H%M"` && mv ~/Downloads/artifacts.zip ./ && unzip artifacts.zip; mv testing/tests/zversim/tb-stress/out `pbpaste` && cd `pbpaste`'
+alias -- dbg='export BACKEND_CONFIG=debug; export CONFIG=debug'
+alias -- dbgoff='unset BACKEND_CONFIG; unset CONFIG'
+alias -- dock='docker exec -it --user tzhou special-tzhou zsh'
+alias -- deck='sudo service docker start && sudo chmod 666 /var/run/docker.sock'
+
+lc() {
+    sudo apt-get install -y locales
+    sudo localedef -v -c -i en_US -f UTF-8 en_US.UTF-8
+}
+
+tinytensor() {
+    export ROOT=~/proj_sw/tinytensor
+    export PYTHONPATH=$ROOT:$ROOT/src:$ROOT/tests:$ROOT/bbe/build/obj/py_api:$ROOT/bbe/py_api/tests:$PYTHONPATH
+    export ARCH_NAME=grayskull
+    export BUDA_HOME=$ROOT/bbe
+    export CONFIG=release
+    lc; j tinytensor
+}
+
+fixws() {
+  (export GIT_EDITOR=: && git -c apply.whitespace=fix add -ue .) && git checkout . && git reset
+}
 
 ######################
 # Directory Triggers
 ######################
-
 cd() {
     builtin cd "$@" && eval "`ondir \"$OLDPWD\" \"$PWD\"`"
 }
-
 pushd() {
     builtin pushd "$@" && eval "`ondir \"$OLDPWD\" \"$PWD\"`"
 }
-
 popd() {
     builtin popd "$@" && eval "`ondir \"$OLDPWD\" \"$PWD\"`"
 }
@@ -256,5 +266,3 @@ popd() {
 eval "`ondir /`"
 
 [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
-
-source ~/.fonts/*.sh

@@ -1,14 +1,19 @@
 [user]
 	email = tzhou@tenstorrent.com
 	name = Tony Zhou
+[color]
+	ui = auto
 [alias]
 	lga = !"git log-graph-specific --all"
 	lg  = !"git log-graph-specific"
 	log-graph-specific = log --graph --abbrev-commit --decorate --format=format:'%C(bold red)%h%C(reset) - %C(bold green)(%ar)%C(reset) %C(white)%s%C(reset) %C(dim white)- %an%C(reset)%C(auto)%d%C(reset)'
-	cf = clang-format-7 --binary /usr/bin/clang-format-7
+	cm = commit -m 
 	co = checkout
 	cob = checkout -b
+	df = diff
+	dfa = diff --cached
 	fm = fetch origin master:master
+	oops = commit --amend --no-edit
 [pull]
 	rebase = true
 [filter "lfs"]

@@ -1,29 +1,31 @@
 [user]
-	email = tzhou@tenstorrent.com
-	name = Tony Zhou
+    email = tzhou@tenstorrent.com
+    name = Tony Zhou
 [color]
-	ui = auto
+    ui = auto
 [alias]
-	lga = !"git log-graph-specific --all"
-	lg  = !"git log-graph-specific"
-	log-graph-specific = log --graph --abbrev-commit --decorate --format=format:'%C(bold red)%h%C(reset) - %C(bold green)(%ar)%C(reset) %C(white)%s%C(reset) %C(dim white)- %an%C(reset)%C(auto)%d%C(reset)'
-	cm = commit -m 
-	co = checkout
-	cob = checkout -b
-	df = diff
-	dfa = diff --cached
-	fm = fetch origin master:master
-	oops = commit --amend --no-edit
+    lga = !"git log-graph-specific --all"
+    lg  = !"git log-graph-specific"
+    log-graph-specific = log --graph --abbrev-commit --decorate --format=format:'%C(bold red)%h%C(reset) - %C(bold green)(%ar)%C(reset) %C(white)%s%C(reset) %C(dim white)- %an%C(reset)%C(auto)%d%C(reset)'
+    pb = !"git push --set-upstream origin $(git symbolic-ref --short HEAD)"
+    cm = commit -m
+    co = checkout
+    cob = checkout -b
+    df = diff
+    dfa = diff --cached
+    fm = fetch origin master:master
+    su = submodule update --init --recursive
+    oops = commit --amend --no-edit
 [pull]
-	rebase = true
+    rebase = true
 [filter "lfs"]
-	clean = git-lfs clean -- %f
-	smudge = git-lfs smudge -- %f
-	process = git-lfs filter-process
-	required = true
+    clean = git-lfs clean -- %f
+    smudge = git-lfs smudge -- %f
+    process = git-lfs filter-process
+    required = true
 [core]
-	editor = emacs
+    editor = vim
 [safe]
-	directory = /proj_sw/tools/interactive-run-docker
+    directory = /proj_sw/tools/interactive-run-docker
 [credential]
-	helper = cache
+    helper = cache

@@ -113,6 +113,9 @@ if [ -d "$ANACONDA_PATH" ]; then
     export CONDA_ENVS_PATH=$HOME/miniconda3/envs/
 fi
 
+# Workaround for VSCode 'Unable to connect to VS Code server' error
+export VSCODE_IPC_HOOK_CLI=$(find /tmp -name 'vscode-ipc-*' -print -quit)
+
 # FZF in Tmux
 export FZF_TMUX=1
 

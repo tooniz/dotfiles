@@ -158,7 +158,8 @@ alias x='exit'
 
 
 [ -f ~/.fzf.bash ] && source ~/.fzf.bash
-zsh
+# put this in .profile instead
+# zsh
 
 # >>> conda initialize >>>
 # !! Contents within this block are managed by 'conda init' !!

@@ -1,28 +1,29 @@
 ######################
 # Alias
 ######################
-
 # So you can quickly print a column by piping through one of the awkN-s
 alias -- awk1='awk "{ print \$1 }"'
 alias -- awk2='awk "{ print \$2 }"'
 alias -- awk3='awk "{ print \$3 }"'
 alias -- awk4='awk "{ print \$4 }"'
 
+######################
+# Git
+######################
 alias -- gs='git status'
 alias -- g-extra='git status -s | grep -e "??" | awk2'
 alias -- g-root='git rev-parse --show-toplevel'
 alias -- g-parent='git log --pretty=%P -n 1'
 alias -- g-which-branch='git branch -a --contains'
 
-alias -- em='emacs -nw'
-alias -- av='ansible-vault'
-
 ######################
 # Applications
 ######################
-ec  () { emacsclient > /dev/null 2>&1 "$@" & }
-pie () { /usr/bin/perl -p -i -e "s/$1/$2/g" $3 }
-prm () { /usr/bin/perl -ni -e "print unless /$1/" $2 }
+alias -- em='emacs -nw'
+alias -- av='ansible-vault'
+
+sis () { sed -i "s|${1//\//\\/}|${2//\//\\/}|g" "$3"; }
+sid () { sed -i "/${1//\//\\/}/d" "$3"; }
 ansi_colors () { for (( i = 30; i < 38; i++ )); do echo -e "\033[0;"$i"m Normal: (0;$i); \033[1;"$i"m Light: (1;$i)"; done }
 
 fixws() {

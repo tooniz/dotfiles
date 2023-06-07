@@ -1,6 +1,6 @@
 
 enter /proj_sw/user_dev/tzhou/([^/]+)
-	source ~/scripts/ondir_enter
+	source ~/bin/ondir_enter
 
 enter /localdev/([^/]+)
-	source ~/scripts/ondir_enter
+	source ~/bin/ondir_enter

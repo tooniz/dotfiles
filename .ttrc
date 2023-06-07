@@ -12,11 +12,15 @@ export TT_BACKEND_PROFILER=1
 
 alias -- jp='cd $ROOT'
 alias -- x='exit'
-alias -- rst='find . -name "reset.sh" | sh'
 alias -- ird='python3 $USER_DEV/ird/interactive-run-docker.py'
 
-alias -- dbg='export BACKEND_CONFIG=debug; export CONFIG=debug'
-alias -- dbgoff='unset BACKEND_CONFIG; unset CONFIG'
+alias -- config-gs='export ARCH_NAME=grayskull'
+alias -- config-wh='export ARCH_NAME=wormhole_b0'
+alias -- config-bh='export ARCH_NAME=blackhole'
+
+alias -- rst='find . -name "reset.sh" | sh'
+alias -- dbgon='export BACKEND_CONFIG=debug; export CONFIG=debug; export TT_BACKEND_PROFILER=1'
+alias -- dbgoff='unset BACKEND_CONFIG; unset CONFIG; unset TT_BACKEND_PROFILER'
 alias -- dock='docker exec -it --user tzhou special-tzhou zsh'
 alias -- deck='sudo service docker start && sudo chmod 666 /var/run/docker.sock'
 
@@ -33,4 +37,14 @@ tinytensor() {
     lc; cd $ROOT
 }
 
-dbg
+if [[ $HOST =~ -gs- ]]; then
+    config-gs
+elif [[ $HOST =~ -wh- ]]; then
+    config-wh
+elif [[ $HOST =~ -bh- ]]; then
+    config-bh
+else
+    echo "Defaulting to ARCH_NAME=$ARCH_NAME"
+fi
+
+dbgon

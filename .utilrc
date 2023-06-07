@@ -10,7 +10,9 @@ alias -- awk4='awk "{ print \$4 }"'
 ######################
 # Git
 ######################
-alias -- gs='git status'
+# Complementary to gitconfig and git plugin
+alias -- gl='git lg'
+alias -- gla='git lga'
 alias -- g-extra='git status -s | grep -e "??" | awk2'
 alias -- g-root='git rev-parse --show-toplevel'
 alias -- g-parent='git log --pretty=%P -n 1'

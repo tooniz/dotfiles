@@ -69,7 +69,7 @@ ZSH_THEME="robbyrussell"
 ######################
 
 plugins=(
-  git zsh-syntax-highlighting #zsh-autosuggestions
+  git zsh-syntax-highlighting # zsh-autosuggestions
 )
 
 source $ZSH/oh-my-zsh.sh
@@ -114,7 +114,7 @@ if [ -d "$ANACONDA_PATH" ]; then
 fi
 
 # Workaround for VSCode 'Unable to connect to VS Code server' error
-export VSCODE_IPC_HOOK_CLI=$(find /tmp -name 'vscode-ipc-*' -print -quit)
+export VSCODE_IPC_HOOK_CLI=$(find /tmp -maxdepth 1 -name 'vscode-ipc-*' -print -quit)
 
 # FZF in Tmux
 export FZF_TMUX=1

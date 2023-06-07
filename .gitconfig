@@ -11,11 +11,10 @@
     cm = commit -m
     co = checkout
     cob = checkout -b
-    df = diff
-    dfa = diff --cached
-    fm = fetch origin master:master
     su = submodule update --init --recursive
+    sync = !git pull && git submodule sync && git su
     oops = commit --amend --no-edit
+    skip = !git commit --amend --no-edit -m \"$(git log -1 --pretty=%B | sed 's/\\[run_ci\\]//g')\"
 [pull]
     rebase = true
 [filter "lfs"]

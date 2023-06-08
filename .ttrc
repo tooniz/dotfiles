@@ -6,23 +6,31 @@ export ALL_BAZEL=1
 export VCD_NOFPU=1 # disable vcd dump for FPU
 export FAST_VERSIM=3 # optimized for runtime
 export DEVICE_RUNNER=Silicon
-export ARCH_NAME=wormhole_b0
+export ARCH_NAME=undefined
 export SKIP_BBE_UPDATE=1
-export TT_BACKEND_PROFILER=1
 
-alias -- jp='cd $ROOT'
-alias -- x='exit'
-alias -- ird='python3 $USER_DEV/ird/interactive-run-docker.py'
-
+alias -- ird='python3 /proj_sw//tools/interactive-run-docker/interactive-run-docker.py'
 alias -- config-gs='export ARCH_NAME=grayskull'
 alias -- config-wh='export ARCH_NAME=wormhole_b0'
 alias -- config-bh='export ARCH_NAME=blackhole'
 
 alias -- rst='find . -name "reset.sh" | sh'
-alias -- dbgon='export BACKEND_CONFIG=debug; export CONFIG=debug; export TT_BACKEND_PROFILER=1'
-alias -- dbgoff='unset BACKEND_CONFIG; unset CONFIG; unset TT_BACKEND_PROFILER'
 alias -- dock='docker exec -it --user tzhou special-tzhou zsh'
 alias -- deck='sudo service docker start && sudo chmod 666 /var/run/docker.sock'
+
+dbgon() {
+    export CONFIG=debug
+    export BACKEND_CONFIG=debug
+    export PYBUDA_OP_PERF=1
+    export TT_BACKEND_PROFILER=1
+}
+
+dbgoff() {
+    unset CONFIG
+    unset BACKEND_CONFIG
+    unset PYBUDA_OP_PERF
+    unset TT_BACKEND_PROFILER
+}
 
 lc() {
     sudo apt-get install -y locales
@@ -44,7 +52,14 @@ elif [[ $HOST =~ -wh- ]]; then
 elif [[ $HOST =~ -bh- ]]; then
     config-bh
 else
-    echo "Defaulting to ARCH_NAME=$ARCH_NAME"
+    echo "Legacy docker $HOST"
+    if ! service ssh status >/dev/null 2>&1; then
+        sudo service ssh start
+    fi
+fi
+
+if [ -f $USER_DEV/ird/interactive-run-docker.py ]; then
+    alias -- ird='python3 $USER_DEV/ird/interactive-run-docker.py'
 fi
 
 dbgon

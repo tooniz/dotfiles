@@ -11,6 +11,7 @@ SHARED="/proj_sw/user_dev/$USER"
 
 # Symlink from dotfiles repository
 create_symlink() {
+    echo "Linking $1 ..."
     local from_path="$FROM/$1"
     local home_path="$HOME/$1"
     rm -rf "$home_path"
@@ -19,6 +20,7 @@ create_symlink() {
 
 # Symlink from shared network drive
 create_external_symlink() {
+    echo "Linking $1 ..."
     local external_path="$SHARED/$1"
     local home_path="$HOME/$1"
     if [ ! -d "$external_path" ]; then
@@ -31,17 +33,21 @@ create_external_symlink() {
 }
 
 if [ ! -d "$HOME/.ssh" ]; then
+    echo "Setting up ssh ..."
     mkdir -p "$HOME/.ssh"
     cp "$FROM/.ssh/id_ed25519" "$HOME/.ssh"
     cp "$FROM/.ssh/id_ed25519.pub" "$HOME/.ssh"
+    sudo apt-get install ansible
 fi
 
 if [ ! -d "$HOME/.oh-my-zsh" ]; then
+    echo "Setting up oh-my-zsh ..."
     git clone https://github.com/robbyrussell/oh-my-zsh.git $HOME/.oh-my-zsh
     git clone https://github.com/zsh-users/zsh-syntax-highlighting.git $HOME/.oh-my-zsh/custom/plugins/zsh-syntax-highlighting
 fi
 
 if [ ! -d "$HOME/.fzf" ]; then
+    echo "Setting up fzf..."
     git clone --depth 1 https://github.com/junegunn/fzf.git $HOME/.fzf
     echo "y" | $HOME/.fzf/install
 fi
@@ -61,3 +67,9 @@ create_external_symlink ".cache"
 create_external_symlink ".ccache"
 create_external_symlink ".vscode-server"
 create_external_symlink "testify"
+
+if ! command -v fdfind &>/dev/null; then
+    echo "Setting up fd ..."
+    sudo apt-get install fdfind
+    ln -s $(which fdfind) ~/.local/bin/fd
+fi

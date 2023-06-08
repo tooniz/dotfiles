@@ -176,3 +176,5 @@ fi
 unset __conda_setup
 # <<< conda initialize <<<
 
+[ -f ~/.ttrc ] && source ~/.ttrc
+[ -f ~/.utilrc ] && source ~/.utilrc

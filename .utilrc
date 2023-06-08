@@ -1,4 +1,11 @@
 ######################
+# FZF
+######################
+export FZF_TMUX=1
+export FZF_DEFAULT_COMMAND='fd --type file'
+export FZF_CTRL_T_COMMAND="$FZF_DEFAULT_COMMAND"
+
+######################
 # Alias
 ######################
 # So you can quickly print a column by piping through one of the awkN-s
@@ -7,10 +14,20 @@ alias -- awk2='awk "{ print \$2 }"'
 alias -- awk3='awk "{ print \$3 }"'
 alias -- awk4='awk "{ print \$4 }"'
 
+alias -- c='cd ..'
+alias -- x='exit'
+alias -- jp='cd $ROOT'
+alias -- more='less'
+alias -- l.='ls -d .* -l --color=tty'
+alias -- ll='ls -l --color=tty'
+alias -- ls='ls --color=tty'
+alias -- cat='bat'
+
 ######################
 # Git
 ######################
-# Complementary to gitconfig and git plugin
+# The choice of using an alias is to avoid having to type 'git' all the time
+# plus also some features require omz git plugin which is not usable in gitconfig
 alias -- gl='git lg'
 alias -- gla='git lga'
 alias -- g-extra='git status -s | grep -e "??" | awk2'
@@ -18,16 +35,34 @@ alias -- g-root='git rev-parse --show-toplevel'
 alias -- g-parent='git log --pretty=%P -n 1'
 alias -- g-which-branch='git branch -a --contains'
 
+# Fetches and deletes the current branch unless it's not yet merged
+alias -- gbrd='br=$(git_current_branch) && git co $(git_main_branch) && git fetch && git branch -d $br'
+# Fetches and rebases the current branch on the main branch
+alias -- grbom='git fetch && git rebase origin/$(git_main_branch)'
+
+######################
+# VSCode
+######################
+if [[ "$TERM_PROGRAM" == "vscode" ]]; then
+    # Workaround for VSCode 'Unable to connect to VS Code server' error https://github.com/microsoft/vscode-remote-release/issues/6997
+    # export VSCODE_IPC_HOOK_CLI=$(lsof | grep $UID/vscode-ipc | awk '{print $(NF-1)}' | head -n 1)
+    export VSCODE_IPC_HOOK_CLI=$(find /tmp -maxdepth 1 -name 'vscode-ipc-*' -exec ls -lt {} + | head -n 1 | awk '{print $NF}')
+    export EDITOR='code --wait'
+    export VISUAL='code --wait'
+    export EDITOR_NB='code'
+fi
+
 ######################
 # Applications
 ######################
 alias -- em='emacs -nw'
 alias -- av='ansible-vault'
+alias -- tmat='tmux attach -d -t'
+
+j() {
+    cd $USER_DEV/$1
+}
 
 sis () { sed -i "s|${1//\//\\/}|${2//\//\\/}|g" "$3"; }
 sid () { sed -i "/${1//\//\\/}/d" "$3"; }
 ansi_colors () { for (( i = 30; i < 38; i++ )); do echo -e "\033[0;"$i"m Normal: (0;$i); \033[1;"$i"m Light: (1;$i)"; done }
-
-fixws() {
-  (export GIT_EDITOR=: && git -c apply.whitespace=fix add -ue .) && git checkout . && git reset
-}

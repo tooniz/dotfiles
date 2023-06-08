@@ -105,6 +105,8 @@ export USER_DEV=$HOME
 # Set shared user dev
 export ROOT="$USER_DEV"
 
+export EDITOR_NB='vim'
+
 # Conda
 export ANACONDA_PATH=$USER_DEV/miniconda3/
 if [ -d "$ANACONDA_PATH" ]; then
@@ -112,12 +114,6 @@ if [ -d "$ANACONDA_PATH" ]; then
     source $ANACONDA_PATH/etc/profile.d/conda.sh
     export CONDA_ENVS_PATH=$HOME/miniconda3/envs/
 fi
-
-# Workaround for VSCode 'Unable to connect to VS Code server' error
-export VSCODE_IPC_HOOK_CLI=$(find /tmp -maxdepth 1 -name 'vscode-ipc-*' -print -quit)
-
-# FZF in Tmux
-export FZF_TMUX=1
 
 ######################
 # Shell
@@ -130,22 +126,21 @@ colors
 ######################
 # Alias
 ######################
-alias -- c='cd ..'
-alias -- more='less'
 alias -- sz='source ~/.zshrc'
-alias -- l.='ls -d .* -l --color=tty'
-alias -- ll='ls -l --color=tty'
-alias -- ls='ls --color=tty'
-alias -- cat='bat'
-
 [ -f ~/.utilrc ] && source ~/.utilrc
+
+######################
+# Auto File Open
+######################
+alias -s cc=$EDITOR_NB
+alias -s cpp=$EDITOR_NB
+alias -s h=$EDITOR_NB
+alias -s hpp=$EDITOR_NB
+alias -s yaml=$EDITOR_NB
 
 ######################
 # Functions
 ######################
-j() {
-    cd $USER_DEV/$1
-}
 
 # Directory triggers for ondir
 cd() {

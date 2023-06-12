@@ -52,6 +52,11 @@ if [ ! -d "$HOME/.fzf" ]; then
     echo "y" | $HOME/.fzf/install
 fi
 
+if [ ! -d "$HOME/diff-so-fancy" ]; then
+    echo "Setting up diff-so-fancy..."
+    git clone git@github.com:so-fancy/diff-so-fancy.git $HOME/.diff-so-fancy
+fi
+
 create_symlink ".ttrc"
 create_symlink ".utilrc"
 create_symlink ".bashrc"

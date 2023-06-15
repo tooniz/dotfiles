@@ -10,9 +10,9 @@ export ARCH_NAME=undefined
 export SKIP_BBE_UPDATE=1
 
 alias -- ird='python3 /proj_sw//tools/interactive-run-docker/interactive-run-docker.py'
-alias -- config-gs='export ARCH_NAME=grayskull'
-alias -- config-wh='export ARCH_NAME=wormhole_b0'
-alias -- config-bh='export ARCH_NAME=blackhole'
+alias -- config-gs='export ARCH_NAME=grayskull; export BACKEND_ARCH_NAME=$ARCH_NAME'
+alias -- config-wh='export ARCH_NAME=wormhole_b0; export BACKEND_ARCH_NAME=$ARCH_NAME'
+alias -- config-bh='export ARCH_NAME=blackhole; export BACKEND_ARCH_NAME=$ARCH_NAME'
 
 alias -- rst='find . -name "reset.sh" | sh'
 alias -- dock='docker exec -it --user tzhou special-tzhou zsh'
@@ -45,18 +45,22 @@ tinytensor() {
     lc; cd $ROOT
 }
 
-if [[ $HOST =~ -gs- ]]; then
+ssh_hostname=$(hostname)
+if [[ $ssh_hostname =~ -gs- ]]; then
     config-gs
-elif [[ $HOST =~ -wh- ]]; then
-    config-wh
-elif [[ $HOST =~ -bh- ]]; then
-    config-bh
 else
-    echo "Legacy docker $HOST"
-    if ! service ssh status >/dev/null 2>&1; then
-        sudo service ssh start
-    fi
+    config-wh
 fi
+# elif [[ $ssh_hostname =~ -wh- ]]; then
+#     config-wh
+# elif [[ $ssh_hostname =~ -bh- ]]; then
+#     config-bh
+# else
+#     echo "Legacy docker $ssh_hostname"
+#     if ! service ssh status >/dev/null 2>&1; then
+#         sudo service ssh start
+#     fi
+# fi
 
 if [ -f $USER_DEV/ird/interactive-run-docker.py ]; then
     alias -- ird='python3 $USER_DEV/ird/interactive-run-docker.py'

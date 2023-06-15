@@ -14,7 +14,7 @@
     su = submodule update --init --recursive
     sync = !git pull && git submodule sync && git su
     oops = commit --amend --no-edit
-    skip = !git commit --amend --no-edit -m \"$(git log -1 --pretty=%B | sed 's/\\[run_ci\\]//g')\"
+    skip-ci = !git oops -m \"$(git log -1 --pretty=%B | sed 's/\\[run_\\(ci\\|perf\\)\\]//g')\"
 [pull]
     rebase = true
 [filter "lfs"]

@@ -75,6 +75,6 @@ create_external_symlink "testify"
 
 if ! command -v fdfind &>/dev/null; then
     echo "Setting up fd ..."
-    sudo apt-get install fdfind
+    sudo apt-get install fd-find
     ln -s $(which fdfind) ~/.local/bin/fd
 fi

@@ -35,10 +35,13 @@ alias -- g-root='git rev-parse --show-toplevel'
 alias -- g-parent='git log --pretty=%P -n 1'
 alias -- g-which-branch='git branch -a --contains'
 
-# Fetches and deletes the current branch unless it's not yet merged
-alias -- gbrd='br=$(git_current_branch) && git co $(git_main_branch) && git fetch && git branch -d $br'
-# Fetches and rebases the current branch on the main branch
-alias -- grbom='git fetch && git rebase origin/$(git_main_branch)'
+# Useful for post-merge:
+# fetches and deletes the current branch unless it's not yet merged
+alias -- gbrd='git fetch && br=$(git_current_branch) && git co $(git_main_branch) && git branch -d $br'
+
+# Useful for pre-merge:
+# fetches and rebases the current branch on main, and removes [run_ci] tag
+alias -- grbom='git fetch && git rebase origin/$(git_main_branch) && git skip-ci'
 
 ######################
 # VSCode

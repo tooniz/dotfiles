@@ -1,6 +1,9 @@
 ######################
-# FZF
+# Environment
 ######################
+export CCACHE=$(which ccache)
+export CCACHE_CMD="$CCACHE"
+
 export FZF_TMUX=1
 export FZF_DEFAULT_COMMAND='fd --type file'
 export FZF_CTRL_T_COMMAND="$FZF_DEFAULT_COMMAND"
@@ -16,7 +19,7 @@ alias -- awk4='awk "{ print \$4 }"'
 
 alias -- c='cd ..'
 alias -- x='exit'
-alias -- jp='cd $ROOT'
+alias -- jp='builtin cd $ROOT && eval "`ondir /`"'
 alias -- more='less'
 alias -- l.='ls -d .* -l --color=tty'
 alias -- ll='ls -l --color=tty'
@@ -40,7 +43,7 @@ alias -- g-which-branch='git branch -a --contains'
 alias -- gbrd='git fetch && br=$(git_current_branch) && git co $(git_main_branch) && git branch -d $br'
 
 # Useful for pre-merge:
-# fetches and rebases the current branch on main, and removes [run_ci] tag
+# fetches and rebases the current branch on main, and removes [run_(ci|perf)] tags
 alias -- grbom='git fetch && git rebase origin/$(git_main_branch) && git skip-ci'
 
 ######################
@@ -63,7 +66,7 @@ alias -- av='ansible-vault'
 alias -- tmat='tmux attach -d -t'
 
 j() {
-    cd $USER_DEV/$1
+    builtin cd $USER_DEV/$1 && eval "`ondir /`"
 }
 
 sis () { sed -i "s|${1//\//\\/}|${2//\//\\/}|g" "$3"; }

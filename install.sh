@@ -33,11 +33,12 @@ create_external_symlink() {
 }
 
 if [ ! -d "$HOME/.ssh" ]; then
-    echo "Setting up ssh ..."
+    echo "Setting up SSH keys..."
     mkdir -p "$HOME/.ssh"
     cp "$FROM/.ssh/id_ed25519" "$HOME/.ssh"
     cp "$FROM/.ssh/id_ed25519.pub" "$HOME/.ssh"
     sudo apt-get install ansible
+    ansible-vault decrypt .ssh/id_ed25519
 fi
 
 if [ ! -d "$HOME/.oh-my-zsh" ]; then
@@ -52,29 +53,33 @@ if [ ! -d "$HOME/.fzf" ]; then
     echo "y" | $HOME/.fzf/install
 fi
 
-if [ ! -d "$HOME/diff-so-fancy" ]; then
+if [ ! -d "$HOME/.diff-so-fancy" ]; then
     echo "Setting up diff-so-fancy..."
     git clone git@github.com:so-fancy/diff-so-fancy.git $HOME/.diff-so-fancy
 fi
 
+if ! command -v fdfind &>/dev/null; then
+    echo "Setting up fd ..."
+    sudo apt-get install fd-find
+    if [ ! -f $HOME/.local/bin/fd ]; then
+       ln -s $(which fdfind) $HOME/.local/bin/fd
+    fi
+fi
+
+# Link dotfiles
 create_symlink ".ttrc"
 create_symlink ".utilrc"
 create_symlink ".bashrc"
 create_symlink ".zshrc"
+create_symlink ".zlogin"
 create_symlink ".profile"
 create_symlink ".ondirrc"
 create_symlink ".emacs"
 create_symlink ".gitconfig"
 create_symlink "bin"
 
-create_external_symlink ".tmp"
+# Link large directories from shared network drive
 create_external_symlink ".cache"
-create_external_symlink ".ccache"
 create_external_symlink ".vscode-server"
 create_external_symlink "testify"
-
-if ! command -v fdfind &>/dev/null; then
-    echo "Setting up fd ..."
-    sudo apt-get install fd-find
-    ln -s $(which fdfind) ~/.local/bin/fd
-fi
+# create_external_symlink ".ccache" # poor performance on network drive

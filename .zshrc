@@ -100,6 +100,11 @@ export LS_COLORS='no=00;37:fi=00;37:di=01;97:ln=01;33:pi=40;34:so=00;34:bd=40;34
 # Default to user home
 export USER_DEV=$HOME
 
+# alias -- time_ms="python3 -c 'from time import time; print(int(round(time() * 1000)))'"
+# timer=$(time_ms)
+# now=$(time_ms)
+# echo $(($now-$timer))":.timer_overhead"
+
 [ -f ~/.ttrc ] && source ~/.ttrc
 
 # Set shared user dev
@@ -152,8 +157,5 @@ pushd() {
 popd() {
     builtin popd "$@" && eval "`ondir \"$OLDPWD\" \"$PWD\"`"
 }
-
-# Run ondir on login
-eval "`ondir /`"
 
 [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh

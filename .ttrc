@@ -2,11 +2,16 @@
 # TensTorrent
 ######################
 export USER_DEV=/proj_sw/user_dev/$USER/
+export ROOT="$USER_DEV"
 export ALL_BAZEL=1
 export VCD_NOFPU=1 # disable vcd dump for FPU
 export FAST_VERSIM=3 # optimized for runtime
 export DEVICE_RUNNER=Silicon
 export SKIP_BBE_UPDATE=1
+
+alias -- config-gs='export ARCH_NAME=grayskull'
+alias -- config-wh='export ARCH_NAME=wormhole_b0'
+alias -- config-bh='export ARCH_NAME=blackhole'
 
 if [[ -v IRD_ARCH_NAME ]]; then
     export ARCH_NAME="$IRD_ARCH_NAME"
@@ -20,13 +25,8 @@ else
     fi
     echo "ARCH_NAME=$ARCH_NAME based on $ssh_hostname"
 fi
-export BACKEND_ARCH_NAME="$ARCH_NAME"
 
 alias -- ird='python3 /proj_sw//tools/interactive-run-docker/interactive-run-docker.py'
-alias -- config-gs='export ARCH_NAME=grayskull; export BACKEND_ARCH_NAME=$ARCH_NAME'
-alias -- config-wh='export ARCH_NAME=wormhole_b0; export BACKEND_ARCH_NAME=$ARCH_NAME'
-alias -- config-bh='export ARCH_NAME=blackhole; export BACKEND_ARCH_NAME=$ARCH_NAME'
-
 alias -- dock='docker exec -it --user tzhou special-tzhou zsh'
 alias -- deck='sudo service docker start && sudo chmod 666 /var/run/docker.sock'
 
@@ -44,11 +44,6 @@ dbgoff() {
     unset TT_BACKEND_PROFILER
 }
 
-lc() {
-    sudo apt-get install -y locales
-    sudo localedef -v -c -i en_US -f UTF-8 en_US.UTF-8
-}
-
 rst() {
     reset_command=$(fd tensix-reset)
     if [[ -n "$reset_command" ]]; then
@@ -56,16 +51,6 @@ rst() {
     fi
 }
 
-tinytensor() {
-    export ROOT=~/proj_sw/tinytensor
-    export PYTHONPATH=$ROOT:$ROOT/src:$ROOT/tests:$ROOT/bbe/build/obj/py_api:$ROOT/bbe/py_api/tests:$PYTHONPATH
-    export BUDA_HOME=$ROOT/bbe
-    export CONFIG=release
-    lc; cd $ROOT
-}
-
-if [ -f $USER_DEV/ird/interactive-run-docker.py ]; then
-    alias -- ird='python3 $USER_DEV/ird/interactive-run-docker.py'
-fi
+[ -f $USER_DEV/ird/interactive-run-docker.py ] && alias -- ird='python3 $USER_DEV/ird/interactive-run-docker.py'
 
 dbgoff

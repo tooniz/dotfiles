@@ -17,14 +17,30 @@ alias -- awk2='awk "{ print \$2 }"'
 alias -- awk3='awk "{ print \$3 }"'
 alias -- awk4='awk "{ print \$4 }"'
 
-alias -- c='cd ..'
+# Single letter aliases better be commonly used
+alias -- c='builtin cd ..'
 alias -- x='exit'
+alias -- e='emacs -nw'
+alias -- t='tmux attach -d -t'
+
+j() {
+    builtin cd $USER_DEV/$1 && eval "`ondir /`"
+}
+
+alias -- sz='source ~/.zshrc'
 alias -- jp='builtin cd $ROOT && eval "`ondir /`"'
 alias -- more='less'
 alias -- l.='ls -d .* -l --color=tty'
 alias -- ll='ls -l --color=tty'
 alias -- ls='ls --color=tty'
 alias -- cat='bat'
+
+######################
+# Applications
+######################
+dsf () { diff -u "$@" | ~/.diff-so-fancy/diff-so-fancy | less; }
+sis () { sed -i "s|${1//\//\\/}|${2//\//\\/}|g" "$3"; }
+sid () { sed -i "/${1//\//\\/}/d" "$3"; }
 
 ######################
 # Git
@@ -35,8 +51,6 @@ alias -- gl='git lg'
 alias -- gla='git lga'
 alias -- g-extra='git status -s | grep -e "??" | awk2'
 alias -- g-root='git rev-parse --show-toplevel'
-alias -- g-parent='git log --pretty=%P -n 1'
-alias -- g-which-branch='git branch -a --contains'
 
 # Useful for post-merge:
 # fetches and deletes the current branch unless it's not yet merged
@@ -45,6 +59,9 @@ alias -- gbrd='git fetch && br=$(git_current_branch) && git co $(git_main_branch
 # Useful for pre-merge:
 # fetches and rebases the current branch on main, and removes [run_(ci|perf)] tags
 alias -- grbom='git fetch && git rebase origin/$(git_main_branch) && git skip-ci'
+
+# Refresh dotfiles with remote
+alias -- dotfiles='cd ~/dotfiles && git stash && git pull && git stash pop'
 
 ######################
 # VSCode
@@ -57,18 +74,3 @@ if [[ "$TERM_PROGRAM" == "vscode" ]]; then
     export VISUAL='code --wait'
     export EDITOR_NB='code'
 fi
-
-######################
-# Applications
-######################
-alias -- em='emacs -nw'
-alias -- av='ansible-vault'
-alias -- tmat='tmux attach -d -t'
-
-j() {
-    builtin cd $USER_DEV/$1 && eval "`ondir /`"
-}
-
-sis () { sed -i "s|${1//\//\\/}|${2//\//\\/}|g" "$3"; }
-sid () { sed -i "/${1//\//\\/}/d" "$3"; }
-ansi_colors () { for (( i = 30; i < 38; i++ )); do echo -e "\033[0;"$i"m Normal: (0;$i); \033[1;"$i"m Light: (1;$i)"; done }

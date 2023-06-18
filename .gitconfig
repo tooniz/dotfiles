@@ -15,6 +15,7 @@
 	sync = !git pull && git submodule sync && git su
 	oops = !git add -u && git commit --amend --no-edit
 	skip-ci = !git oops -m \"$(git log -1 --pretty=%B | sed 's/\\[run_\\(ci\\|perf\\)\\]//g')\"
+	patch = !git --no-pager diff --no-color
 [pull]
 	rebase = true
 [filter "lfs"]

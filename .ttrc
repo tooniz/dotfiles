@@ -13,19 +13,6 @@ alias -- config-gs='export ARCH_NAME=grayskull'
 alias -- config-wh='export ARCH_NAME=wormhole_b0'
 alias -- config-bh='export ARCH_NAME=blackhole'
 
-if [[ -v IRD_ARCH_NAME ]]; then
-    export ARCH_NAME="$IRD_ARCH_NAME"
-else
-    export ARCH_NAME=undefined
-    ssh_hostname=$(hostname)
-    if [[ $ssh_hostname =~ -gs- ]]; then
-        config-gs
-    elif [[ $ssh_hostname =~ -wh- ]]; then
-        config-wh
-    fi
-    echo "ARCH_NAME=$ARCH_NAME based on $ssh_hostname"
-fi
-
 alias -- ird='python3 /proj_sw//tools/interactive-run-docker/interactive-run-docker.py'
 alias -- dock='docker exec -it --user tzhou special-tzhou zsh'
 alias -- deck='sudo service docker start && sudo chmod 666 /var/run/docker.sock'
@@ -45,12 +32,17 @@ dbgoff() {
 }
 
 rst() {
-    reset_command=$(fd tensix-reset)
-    if [[ -n "$reset_command" ]]; then
-        "$reset_command" "$@"
+    if [[ -n "$RESET_CMD" ]]; then
+        "$RESET_CMD" "$@"
+    else
+        echo "\$RESET_CMD command is not set, skipping..."
     fi
 }
 
-[ -f $USER_DEV/ird/interactive-run-docker.py ] && alias -- ird='python3 $USER_DEV/ird/interactive-run-docker.py'
+[[ -f $USER_DEV/ird/interactive-run-docker.py ]] && alias -- ird='python3 $USER_DEV/ird/interactive-run-docker.py'
 
-dbgoff
+[[ -v IRD_ARCH_NAME ]] && export ARCH_NAME="$IRD_ARCH_NAME"
+
+if [[ $(pwd) =~ $USER_DEV ]]; then
+    dbgon && eval "`ondir /`"
+fi

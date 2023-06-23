@@ -4,8 +4,16 @@ TOPLEVEL=`git rev-parse --show-toplevel`
 export ROOT=$TOPLEVEL
 export BACKEND_ARCH_NAME=$ARCH_NAME
 
+# fd is much faster but find will do too
+if command -v fdfind &>/dev/null; then
+    export RESET_CMD=$(fd tensix-reset)
+else
+    export RESET_CMD=$(find . -type f -name "tensix-reset" -executable)
+fi
+
 git status -sb
 echo "\n Environment Variables:"
 echo " - ARCH_NAME=$ARCH_NAME"
 echo " - CONFIG=$CONFIG"
-echo "\n \033[0;35m Changed ROOT to ${TOPLEVEL} ... \033[0m \n"
+echo " - RESET_CMD=$RESET_CMD"
+echo "\n \033[0;35m Changed ROOT to $TOPLEVEL ... \033[0m \n"

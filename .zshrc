@@ -77,8 +77,10 @@ source $ZSH/oh-my-zsh.sh
 ######################
 # Dotfiles
 ######################
-if ! command -v fdfind &>/dev/null; then
-    source ~/dotfiles/install.sh
+if [[ -v IRD_CLUSTER ]]; then
+    if ! command -v fdfind &>/dev/null; then
+        source ~/dotfiles/install.sh
+    fi
 fi
 
 ######################

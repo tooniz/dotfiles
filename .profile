@@ -25,3 +25,6 @@ fi
 if [ -d "$HOME/.local/bin" ] ; then
     PATH="$HOME/.local/bin:$PATH"
 fi
+
+# if zsh is not the default shell
+[ "$SHELL" != "/usr/bin/zsh" ] && zsh

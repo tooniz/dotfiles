@@ -38,7 +38,7 @@ if [ ! -d "$HOME/.ssh" ]; then
     cp "$FROM/.ssh/id_ed25519" "$HOME/.ssh"
     cp "$FROM/.ssh/id_ed25519.pub" "$HOME/.ssh"
     sudo apt-get install ansible
-    ansible-vault decrypt .ssh/id_ed25519
+    ansible-vault decrypt $HOME/.ssh/id_ed25519
 fi
 
 if [ ! -d "$HOME/.oh-my-zsh" ]; then
@@ -55,7 +55,7 @@ fi
 
 if [ ! -d "$HOME/.diff-so-fancy" ]; then
     echo "Setting up diff-so-fancy..."
-    git clone git@github.com:so-fancy/diff-so-fancy.git $HOME/.diff-so-fancy
+    git clone https://github.com/so-fancy/diff-so-fancy.git $HOME/.diff-so-fancy
 fi
 
 if ! command -v fdfind &>/dev/null; then
@@ -78,7 +78,9 @@ create_symlink ".gitconfig"
 create_symlink "bin"
 
 # Link large directories from shared network drive
-create_external_symlink ".cache"
-create_external_symlink ".vscode-server"
-create_external_symlink "testify"
+if [ -d "$SHARED" ]; then
+    create_external_symlink ".cache"
+    create_external_symlink ".vscode-server"
+    create_external_symlink "testify"
+fi
 # create_external_symlink ".ccache" # poor performance on network drive

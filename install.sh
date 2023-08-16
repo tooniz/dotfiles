@@ -62,7 +62,15 @@ if ! command -v fdfind &>/dev/null; then
     echo "Setting up fd ..."
     sudo apt-get install fd-find
     if [ ! -f $HOME/.local/bin/fd ]; then
-       ln -s $(which fdfind) $HOME/.local/bin/fd
+        ln -s $(which fdfind) $HOME/.local/bin/fd
+    fi
+fi
+
+if ! command -v batcat &>/dev/null; then
+    echo "Setting up bat ..."
+    echo "y" | sudo apt-get install bat
+    if [ ! -f $HOME/.local/bin/bat ]; then
+        ln -s $(which batcat) $HOME/.local/bin/bat
     fi
 fi
 

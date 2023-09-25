@@ -58,7 +58,7 @@ alias -- gbrd='git fetch && br=$(git_current_branch) && git co $(git_main_branch
 
 # Useful for pre-merge:
 # fetches and rebases the current branch on main, and removes [run_(ci|perf)] tags
-alias -- grbom='git fetch && git rebase origin/$(git_main_branch) && git skip-ci'
+alias -- grbom='git fetch && git rebase origin/$(git_main_branch) && git submodule sync && git su'
 
 # Refresh dotfiles with remote
 alias -- dotfiles='cd ~/dotfiles && git stash && git pull && git stash pop'

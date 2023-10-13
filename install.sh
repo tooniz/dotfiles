@@ -3,6 +3,12 @@
 # Get the absolute path of the current script
 script_path=$(realpath "$0")
 
+OS=$(uname)
+PM="sudo apt-get"
+if [ "$OS" == "Darwin" ]; then
+    PM="brew"
+fi
+
 # Extract the directory path from the script path
 FROM=$(dirname "$script_path")
 
@@ -37,7 +43,7 @@ if [ ! -d "$HOME/.ssh" ]; then
     mkdir -p "$HOME/.ssh"
     cp "$FROM/.ssh/id_ed25519" "$HOME/.ssh"
     cp "$FROM/.ssh/id_ed25519.pub" "$HOME/.ssh"
-    sudo apt-get install ansible
+    $PM install ansible
     ansible-vault decrypt $HOME/.ssh/id_ed25519
 fi
 
@@ -60,17 +66,23 @@ fi
 
 if ! command -v fdfind &>/dev/null; then
     echo "Setting up fd ..."
-    sudo apt-get install fd-find
+    if [ "$OS" == "Darwin" ]; then
+        $PM install fd
+    else
+        $PM install fd-find
+    fi
     if [ ! -f $HOME/.local/bin/fd ]; then
         ln -s $(which fdfind) $HOME/.local/bin/fd
     fi
 fi
 
 if ! command -v batcat &>/dev/null; then
-    echo "Setting up bat ..."
-    echo "y" | sudo apt-get install bat
-    if [ ! -f $HOME/.local/bin/bat ]; then
-        ln -s $(which batcat) $HOME/.local/bin/bat
+    if ! command -v bat &>/dev/null; then
+        echo "Setting up bat ..."
+        echo "y" | $PM install bat
+        if [ ! -f $HOME/.local/bin/bat ]; then
+            ln -s $(which batcat) $HOME/.local/bin/bat
+        fi
     fi
 fi
 
@@ -81,6 +93,7 @@ create_symlink ".bashrc"
 create_symlink ".zshrc"
 create_symlink ".profile"
 create_symlink ".ondirrc"
+create_symlink ".colorsrc"
 create_symlink ".emacs"
 create_symlink ".gitconfig"
 create_symlink "bin"

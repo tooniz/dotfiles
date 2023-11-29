@@ -14,13 +14,11 @@ export ARCH_NAME=grayskull
 alias -- config-gs='export ARCH_NAME=grayskull'
 alias -- config-wh='export ARCH_NAME=wormhole_b0'
 alias -- config-bh='export ARCH_NAME=blackhole'
-
-alias -- ird='python3 /proj_sw//tools/interactive-run-docker/interactive-run-docker.py'
 alias -- dock='docker exec -it --user tzhou special-tzhou zsh'
 alias -- deck='sudo service docker start && sudo chmod 666 /var/run/docker.sock'
 
 dbgon() {
-    export CONFIG=debug
+    export CONFIG=develop
     export BACKEND_CONFIG="$CONFIG"
     export PYBUDA_OP_PERF=1
     export TT_BACKEND_PROFILER=1
@@ -41,7 +39,7 @@ rst() {
     fi
 }
 
-[[ -f $USER_DEV/ird/interactive-run-docker.py ]] && alias -- ird='python3 $USER_DEV/ird/interactive-run-docker.py'
+# [[ -f $USER_DEV/ird/interactive-run-docker.py ]] && alias -- ird='python3 $USER_DEV/ird/interactive-run-docker.py'
 
 [[ -v IRD_ARCH_NAME ]] && export ARCH_NAME="$IRD_ARCH_NAME"
 

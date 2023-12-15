@@ -4,10 +4,10 @@
 script_path=$(realpath "$0")
 
 OS=$(uname)
-PM="sudo apt-get"
-if [ "$OS" == "Darwin" ]; then
-    PM="brew"
-fi
+# PM="sudo apt-get"
+# if [[ "$OS" == "Darwin" ]]; then
+#     PM="brew"
+# fi
 
 # Extract the directory path from the script path
 FROM=$(dirname "$script_path")
@@ -43,7 +43,12 @@ if [ ! -d "$HOME/.ssh" ]; then
     mkdir -p "$HOME/.ssh"
     cp "$FROM/.ssh/id_ed25519" "$HOME/.ssh"
     cp "$FROM/.ssh/id_ed25519.pub" "$HOME/.ssh"
-    $PM install ansible
+
+    if [[ "$OS" == "Darwin" ]]; then
+        brew install ansible
+    else
+        sudo apt-get install ansible
+    fi
     ansible-vault decrypt $HOME/.ssh/id_ed25519
 fi
 
@@ -66,10 +71,10 @@ fi
 
 if ! command -v fdfind &>/dev/null; then
     echo "Setting up fd ..."
-    if [ "$OS" == "Darwin" ]; then
-        $PM install fd
+    if [[ "$OS" == "Darwin" ]]; then
+        brew install fd
     else
-        $PM install fd-find
+        sudo apt-get install fd-find
     fi
     if [ ! -f $HOME/.local/bin/fd ]; then
         ln -s $(which fdfind) $HOME/.local/bin/fd
@@ -79,7 +84,11 @@ fi
 if ! command -v batcat &>/dev/null; then
     if ! command -v bat &>/dev/null; then
         echo "Setting up bat ..."
-        echo "y" | $PM install bat
+        if [[ "$OS" == "Darwin" ]]; then
+            echo "y" | brew install fd
+        else
+            echo "y" | sudo apt-get install bat
+        fi
         if [ ! -f $HOME/.local/bin/bat ]; then
             ln -s $(which batcat) $HOME/.local/bin/bat
         fi

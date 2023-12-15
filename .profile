@@ -26,5 +26,12 @@ if [ -d "$HOME/.local/bin" ] ; then
     PATH="$HOME/.local/bin:$PATH"
 fi
 
+# Bash init scripts (for compatibility)
+if [ -d /etc/profile.d ]; then
+    for file in /etc/profile.d/*.sh; do
+        source "$file"
+    done
+fi
+
 # if zsh is not the default shell
 [ "$SHELL" != "/usr/bin/zsh" ] && zsh

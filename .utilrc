@@ -2,7 +2,7 @@
 # Environment
 ######################
 export CCACHE=$(which ccache)
-export CCACHE_CMD="$CCACHE"
+export PATH="/usr/lib/ccache:$PATH"
 
 export FZF_TMUX=1
 export FZF_DEFAULT_COMMAND='fd --type file'

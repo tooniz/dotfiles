@@ -18,28 +18,36 @@ alias -- dock='docker exec -it --user tzhou special-tzhou zsh'
 alias -- deck='sudo service docker start && sudo chmod 666 /var/run/docker.sock'
 
 dbgon() {
-    export CONFIG=develop
+    export CONFIG=debug
     export BACKEND_CONFIG="$CONFIG"
+    export LOGGER_LEVEL=Debug
     export PYBUDA_OP_PERF=1
+    export PYBUDA_BUILD_DIR=tt_build
     export TT_BACKEND_PROFILER=1
 }
-
 dbgoff() {
     export CONFIG=release
     export BACKEND_CONFIG="$CONFIG"
+    unset LOGGER_LEVEL
     unset PYBUDA_OP_PERF
+    unset PYBUDA_BUILD_DIR
     unset TT_BACKEND_PROFILER
 }
 
 rst() {
-    if [[ -n "$RESET_CMD" ]]; then
-        "$RESET_CMD" "$@"
+    if [[ "$ARCH_NAME" == "grayskull" ]]; then
+        rst_cmd=$(find . -type f -name "tensix-reset" -executable)
+        "$rst_cmd" "$@"
     else
-        echo "\$RESET_CMD command is not set, skipping..."
+        /mnt/motor/syseng/bin/tt-smi/wh/stable -wr "$@"
     fi
 }
 
-# [[ -f $USER_DEV/ird/interactive-run-docker.py ]] && alias -- ird='python3 $USER_DEV/ird/interactive-run-docker.py'
+reportify() {
+    cd ~/reportify
+    conda activate reportify
+    ./run_for_testify.sh 6600
+}
 
 [[ -v IRD_ARCH_NAME ]] && export ARCH_NAME="$IRD_ARCH_NAME"
 

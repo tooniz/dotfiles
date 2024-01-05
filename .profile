@@ -8,6 +8,13 @@
 # for ssh logins, install and configure the libpam-umask package.
 #umask 022
 
+# if zsh is not the default shell
+if [ "$SHELL" != "/usr/bin/zsh" ]; then
+    if which zsh > /dev/null; then
+        zsh
+    fi
+fi
+
 # if running bash
 if [ -n "$BASH_VERSION" ]; then
     # include .bashrc if it exists
@@ -32,6 +39,3 @@ if [ -d /etc/profile.d ]; then
         source "$file"
     done
 fi
-
-# if zsh is not the default shell
-[ "$SHELL" != "/usr/bin/zsh" ] && zsh

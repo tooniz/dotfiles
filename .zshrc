@@ -1,8 +1,14 @@
 # If you come from bash you might have to change your $PATH.
 # export PATH=$HOME/bin:/usr/local/bin:$PATH
 
+# Profiling ZSH
+# zmodload zsh/zprof
+
 # Path to your oh-my-zsh installation.
 export ZSH="$HOME/.oh-my-zsh"
+
+# Change location of zcompdump cache
+export ZSH_COMPDUMP=$ZSH/cache/.zcompdump-$HOST
 
 # Set name of the theme to load --- if set to "random", it will
 # load a random theme each time oh-my-zsh is loaded, in which case,
@@ -69,7 +75,7 @@ ZSH_THEME="robbyrussell"
 ######################
 
 plugins=(
-  git zsh-syntax-highlighting # zsh-autosuggestions
+  git # zsh-syntax-highlighting # zsh-autosuggestions
 )
 
 source $ZSH/oh-my-zsh.sh
@@ -143,15 +149,15 @@ if [[ $(uname) == "Darwin" ]]; then
     alias ondir='ondir_osx'
 fi
 
-# Directory triggers for ondir
-cd() {
-    builtin cd "$@" && eval "`ondir \"$OLDPWD\" \"$PWD\"`"
-}
-pushd() {
-    builtin pushd "$@" && eval "`ondir \"$OLDPWD\" \"$PWD\"`"
-}
-popd() {
-    builtin popd "$@" && eval "`ondir \"$OLDPWD\" \"$PWD\"`"
-}
+# Disabled due to slowness. Directory triggers for ondir
+# cd() {
+#     builtin cd "$@" && eval "`ondir \"$OLDPWD\" \"$PWD\"`"
+# }
+# pushd() {
+#     builtin pushd "$@" && eval "`ondir \"$OLDPWD\" \"$PWD\"`"
+# }
+# popd() {
+#     builtin popd "$@" && eval "`ondir \"$OLDPWD\" \"$PWD\"`"
+# }
 
 [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh

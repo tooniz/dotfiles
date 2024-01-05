@@ -67,11 +67,13 @@ alias -- dotfiles='cd ~/dotfiles && git stash && git pull && git stash pop'
 ######################
 # VSCode
 ######################
+
 if [[ "$TERM_PROGRAM" == "vscode" ]]; then
-    # Workaround for VSCode 'Unable to connect to VS Code server' error https://github.com/microsoft/vscode-remote-release/issues/6997
-    # export VSCODE_IPC_HOOK_CLI=$(lsof | grep $UID/vscode-ipc | awk '{print $(NF-1)}' | head -n 1)
-    export VSCODE_IPC_HOOK_CLI=$(find /tmp -maxdepth 1 -name 'vscode-ipc-*' -exec ls -lt {} + | head -n 1 | awk '{print $NF}')
     export EDITOR='code --wait'
     export VISUAL='code --wait'
     export EDITOR_NB='code'
+    preexec() {                                                                                    
+        # Workaround for VSCode 'Unable to connect to VS Code server' error https://github.com/microsoft/vscode-remote-release/issues/6997
+        export VSCODE_IPC_HOOK_CLI=$(find /tmp -maxdepth 1 -name 'vscode-ipc-*' -exec ls -lt {} + | head -n 1 | awk '{print $NF}')
+    }
 fi

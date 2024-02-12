@@ -7,9 +7,15 @@ export ROOT="$USER_DEV"
 export ALL_BAZEL=1
 export VCD_NOFPU=1 # disable vcd dump for FPU
 export FAST_VERSIM=3 # optimized for runtime
+
 export DEVICE_RUNNER=Silicon
-export SKIP_BBE_UPDATE=1
 export ARCH_NAME=grayskull
+
+# TT-Buda
+export SKIP_BBE_UPDATE=1
+export TT_BUDA_GENERATE_DEPS=1
+
+# TT-Metal
 
 alias -- config-gs='export ARCH_NAME=grayskull'
 alias -- config-wh='export ARCH_NAME=wormhole_b0'
@@ -24,6 +30,8 @@ dbgon() {
     export PYBUDA_OP_PERF=1
     export PYBUDA_BUILD_DIR=tt_build
     export TT_BACKEND_PROFILER=1
+    export TT_METAL_ENV=dev
+    export ENABLE_PROFILER=1
 }
 dbgoff() {
     export CONFIG=release
@@ -32,6 +40,8 @@ dbgoff() {
     unset PYBUDA_OP_PERF
     unset PYBUDA_BUILD_DIR
     unset TT_BACKEND_PROFILER
+    unset TT_METAL_ENV
+    unset ENABLE_PROFILER
 }
 
 rst() {

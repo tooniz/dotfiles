@@ -32,16 +32,18 @@ dbgon() {
     export TT_BACKEND_PROFILER=1
     export TT_METAL_ENV=dev
     export ENABLE_PROFILER=1
+    export ENABLE_TRACY=1
 }
 dbgoff() {
     export CONFIG=release
     export BACKEND_CONFIG="$CONFIG"
+    export TT_METAL_ENV=dev
     unset LOGGER_LEVEL
     unset PYBUDA_OP_PERF
     unset PYBUDA_BUILD_DIR
     unset TT_BACKEND_PROFILER
-    unset TT_METAL_ENV
     unset ENABLE_PROFILER
+    unset ENABLE_TRACY
 }
 
 rst() {

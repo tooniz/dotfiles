@@ -96,7 +96,9 @@ fi
 # Bash init scripts (for compatibility)
 if [ -d /etc/profile.d ]; then
     for file in /etc/profile.d/*.sh; do
-        emulate bash -c 'source "$file"'
+        if [ -r "$file" ]; then
+            emulate bash -c 'source "$file"'
+        fi
     done
 fi
 

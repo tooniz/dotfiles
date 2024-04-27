@@ -1,5 +1,5 @@
 
-enter /proj_sw/user_dev/tzhou/([^/]+)
+enter /home/tzhou/work/([^/]+)
 	source ~/bin/ondir_enter
 
 enter /localdev/([^/]+)

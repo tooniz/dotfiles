@@ -1,0 +1,21 @@
+######################
+# TensTorrent
+######################
+export USER_DEV=/home/$USER/work
+export ROOT="$USER_DEV"
+
+dbgon() {
+    export CONFIG=Debug
+    export VERBOSITY=DEBUG
+    export LOGGER_LEVEL="$VERBOSITY"
+    export LOGURU_LEVEL="$VERBOSITY"
+}
+dbgoff() {
+    export CONFIG=release
+    unset LOGGER_LEVEL
+    unset LOGURU_LEVEL
+}
+
+if [[ $(pwd) =~ $USER_DEV ]]; then
+    dbgon && eval "`ondir /`"
+fi

@@ -109,7 +109,7 @@ export PATH="/usr/bin/:$HOME/.local/bin:$HOME/bin:$PATH"
 export LESS="-F -X $LESS"
 
 [ -f ~/.colorsrc ] && source ~/.colorsrc
-[ -f ~/.ttrc ] && source ~/.ttrc
+[ -f ~/.taalasrc ] && source ~/.taalasrc
 
 # Conda
 export ANACONDA_PATH=$USER_DEV/miniconda3/
@@ -152,14 +152,14 @@ if [[ $(uname) == "Darwin" ]]; then
 fi
 
 # Disabled due to slowness. Directory triggers for ondir
-# cd() {
-#     builtin cd "$@" && eval "`ondir \"$OLDPWD\" \"$PWD\"`"
-# }
-# pushd() {
-#     builtin pushd "$@" && eval "`ondir \"$OLDPWD\" \"$PWD\"`"
-# }
-# popd() {
-#     builtin popd "$@" && eval "`ondir \"$OLDPWD\" \"$PWD\"`"
-# }
+cd() {
+    builtin cd "$@" && eval "`ondir \"$OLDPWD\" \"$PWD\"`"
+}
+pushd() {
+    builtin pushd "$@" && eval "`ondir \"$OLDPWD\" \"$PWD\"`"
+}
+popd() {
+    builtin popd "$@" && eval "`ondir \"$OLDPWD\" \"$PWD\"`"
+}
 
 [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh

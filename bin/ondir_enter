@@ -2,14 +2,12 @@
 
 TOPLEVEL=`git rev-parse --show-toplevel`
 export ROOT=$TOPLEVEL
-export BACKEND_ARCH_NAME=$ARCH_NAME
-export TT_METAL_HOME=$ROOT
 export PYTHONPATH=$ROOT
 
 [ -f build/python_env/bin/activate ] && source build/python_env/bin/activate
+[ -f dev/bin/activate ] && source dev/bin/activate
 
 git status -sb
 echo "\n Environment Variables:"
-echo " - ARCH_NAME=$ARCH_NAME"
 echo " - CONFIG=$CONFIG"
 echo "\n \033[0;35m Changed ROOT to $TOPLEVEL ... \033[0m \n"

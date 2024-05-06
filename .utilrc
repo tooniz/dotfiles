@@ -49,11 +49,15 @@ dsf () { diff -u "$@" | ~/.diff-so-fancy/diff-so-fancy | less; }
 sis () { sed -i "s|${1//\//\\/}|${2//\//\\/}|g" "$3"; }
 sid () { sed -i "/${1//\//\\/}/d" "$3"; }
 q () {
+    [ -n "$VIRTUAL_ENV" ] && TMP_ENV="$VIRTUAL_ENV"
+    source $HOME/dev/bin/activate
     if command -v glow &>/dev/null; then
         python3 ~/bin/query.py "$@" > /tmp/output.md && glow /tmp/output.md
     else
         python3 ~/bin/query.py "$@"
     fi
+    deactivate
+    [ -n "$TMP_ENV" ] && source $TMP_ENV/bin/activate
 }
 
 ######################

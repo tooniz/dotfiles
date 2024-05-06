@@ -45,6 +45,17 @@ if [ ! -d "$HOME/.ssh" ]; then
     ansible-vault decrypt "$HOME/.ssh/id_ed25519"
 fi
 
+# Setup API secrets
+if [ ! -d "$HOME/.secrets" ]; then
+    cp "$FROM/.secrets" "$HOME/.secrets"
+    if [[ $OSTYPE == 'darwin'* ]]; then
+        brew install ansible
+    else
+        sudo apt-get install ansible
+    fi
+    ansible-vault decrypt "$HOME/.secrets"
+fi
+
 # Setup oh-my-zsh
 if [ ! -d "$HOME/.oh-my-zsh" ]; then
     echo "Setting up oh-my-zsh ..."

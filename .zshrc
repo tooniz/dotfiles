@@ -108,6 +108,7 @@ export PATH="/usr/bin/:$HOME/.local/bin:$HOME/bin:$PATH"
 # Tell less not to paginate if less than a page
 export LESS="-F -X $LESS"
 
+[ -f ~/.secrets ] && source ~/.secrets
 [ -f ~/.colorsrc ] && source ~/.colorsrc
 [ -f ~/.taalasrc ] && source ~/.taalasrc
 

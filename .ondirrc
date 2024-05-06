@@ -4,3 +4,6 @@ enter /home/tzhou/work/([^/]+)
 
 enter /localdev/([^/]+)
 	source ~/bin/ondir_enter
+
+enter /home/tzhou
+	source ~/dev/bin/activate

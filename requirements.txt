@@ -1,0 +1,2 @@
+# List dependencies
+groq==0.5.0

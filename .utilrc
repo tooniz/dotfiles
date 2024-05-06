@@ -41,12 +41,20 @@ if command -v bat &>/dev/null; then
     alias -- cat='bat'
 fi
 
+
 ######################
 # Applications
 ######################
 dsf () { diff -u "$@" | ~/.diff-so-fancy/diff-so-fancy | less; }
 sis () { sed -i "s|${1//\//\\/}|${2//\//\\/}|g" "$3"; }
 sid () { sed -i "/${1//\//\\/}/d" "$3"; }
+q () {
+    if command -v glow &>/dev/null; then
+        python3 ~/bin/query.py "$@" > /tmp/output.md && glow /tmp/output.md
+    else
+        python3 ~/bin/query.py "$@"
+    fi
+}
 
 ######################
 # Git

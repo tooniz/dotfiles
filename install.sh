@@ -95,6 +95,19 @@ if ! command -v batcat &>/dev/null; then
     fi
 fi
 
+if [[ "$OS" == "Darwin" ]]; then
+    if ! command -v glow &>/dev/null; then
+        echo "y" | brew install glow
+    fi
+fi
+
+if [ ! -d "$HOME/dev" ]; then
+    echo "Setting up dev venv..."
+    python3 -m venv $HOME/dev 
+    source $HOME/dev/bin/activate
+    pip install -r $FROM/requirements.txt
+fi
+
 # Link dotfiles
 symlink ".ttrc"
 symlink ".utilrc"

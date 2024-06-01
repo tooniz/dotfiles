@@ -1,13 +1,13 @@
 #!/usr/bin/env bash
 
-TOPLEVEL=`git rev-parse --show-toplevel`
-export ROOT=$TOPLEVEL
+ROOT=`git rev-parse --show-toplevel`
+export MOD_HOME=$ROOT
 export PYTHONPATH=$ROOT
 
-[ -f build/python_env/bin/activate ] && source build/python_env/bin/activate
-[ -f dev/bin/activate ] && source dev/bin/activate
+[ -f $HOME/dev/bin/activate ] && source $HOME/dev/bin/activate
+[ -f shared/local_setup.sh ] && source shared/local_setup.sh
 
 git status -sb
 echo "\n Environment Variables:"
 echo " - CONFIG=$CONFIG"
-echo "\n \033[0;35m Changed ROOT to $TOPLEVEL ... \033[0m \n"
+echo "\n \033[0;35m Changed MOD_HOME to $ROOT ... \033[0m \n"

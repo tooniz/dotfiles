@@ -40,20 +40,25 @@ if [ ! -d "$HOME/.ssh" ]; then
     if [[ $OSTYPE == 'darwin'* ]]; then
         brew install ansible
     else
-        sudo apt-get install ansible
+        echo "y" | sudo apt-get install ansible
     fi
     ansible-vault decrypt "$HOME/.ssh/id_ed25519"
 fi
 
 # Setup API secrets
-if [ ! -d "$HOME/.secrets" ]; then
+if [ ! -f "$HOME/.secrets" ]; then
     cp "$FROM/.secrets" "$HOME/.secrets"
     if [[ $OSTYPE == 'darwin'* ]]; then
         brew install ansible
     else
-        sudo apt-get install ansible
+        echo "y" | sudo apt-get install ansible
     fi
     ansible-vault decrypt "$HOME/.secrets"
+fi
+
+# Setup tmux
+if ! command -v tmux &>/dev/null; then
+    echo "y" | sudo apt-get install tmux
 fi
 
 # Setup oh-my-zsh
@@ -106,9 +111,21 @@ if ! command -v batcat &>/dev/null; then
     fi
 fi
 
-if [[ "$OS" == "Darwin" ]]; then
+# Setup clang-format
+if ! command -v clang-format &>/dev/null; then
+    if [[ ! $OSTYPE == 'darwin'* ]]; then
+        echo "y" | sudo apt-get install clang-format
+    fi
+fi
+
+if [[ $OSTYPE == 'darwin'* ]]; then
     if ! command -v glow &>/dev/null; then
         echo "y" | brew install glow
+    else
+        sudo mkdir -p /etc/apt/keyrings
+        curl -fsSL https://repo.charm.sh/apt/gpg.key | sudo gpg --dearmor -o /etc/apt/keyrings/charm.gpg
+        echo "deb [signed-by=/etc/apt/keyrings/charm.gpg] https://repo.charm.sh/apt/ * *" | sudo tee /etc/apt/sources.list.d/charm.list
+        sudo apt update && sudo apt install glow
     fi
 fi
 
@@ -120,7 +137,7 @@ if [ ! -d "$HOME/dev" ]; then
 fi
 
 # Link dotfiles
-symlink ".ttrc"
+symlink ".taalasrc"
 symlink ".utilrc"
 symlink ".bashrc"
 symlink ".zshrc"

@@ -1,5 +1,5 @@
 [user]
-	email = tzhou@tenstorrent.com
+	email = tooniz@gmail.com
 	name = Tony Zhou
 [color]
 	ui = auto
@@ -11,19 +11,15 @@
 	cm = commit -m
 	co = checkout
 	cob = checkout -b
+	root = rev-parse --show-toplevel
 	su = submodule update --init --recursive
 	sync = !git pull && git submodule sync && git su
-	oops = !git add -u && git commit --amend --no-edit
-	skip-ci = !git oops -m \"$(git log -1 --pretty=%B | sed 's/\\[run_\\(ci\\|perf\\)\\]//g')\"
 	patch = !git --no-pager diff --no-color
 [pull]
 	rebase = true
 [core]
 	editor = vim
 	pager = ~/.diff-so-fancy/diff-so-fancy | less --tabs=4 -RFX
-	commentchar = >
-[safe]
-	directory = /proj_sw/tools/interactive-run-docker
 [credential]
 	helper = cache
 [interactive]

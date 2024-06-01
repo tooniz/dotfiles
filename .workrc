@@ -1,11 +1,10 @@
 ######################
-# TensTorrent
+# Dev dev dev
 ######################
-export USER_DEV=/home/$USER/work
-export ROOT="$USER_DEV"
+export ROOT="$HOME"
 
 dbgon() {
-    export CONFIG=Debug
+    export CONFIG=debug
     export VERBOSITY=DEBUG
     export LOGGER_LEVEL="$VERBOSITY"
     export LOGURU_LEVEL="$VERBOSITY"
@@ -16,6 +15,4 @@ dbgoff() {
     unset LOGURU_LEVEL
 }
 
-if [[ $(pwd) =~ $USER_DEV ]]; then
-    dbgon && eval "`ondir /`"
-fi
+dbgon && eval "`ondir /`"

@@ -23,31 +23,24 @@ alias -- awk5='awk "{ print \$5 }"'
 # Single letter aliases better be commonly used
 alias -- c='builtin cd ..'
 alias -- x='exit'
-alias -- e='emacs -nw'
 alias -- t='tmux attach -d -t'
 
-j() {
-    builtin cd $USER_DEV/$1 && eval "`ondir /`"
-}
-
 alias -- sz='source ~/.zshrc'
-alias -- jp='builtin cd $ROOT && eval "`ondir /`"'
+alias -- jp='cd $ROOT'
 alias -- more='less'
 alias -- l.='ls -d .* -l --color=tty'
 alias -- ll='ls -l --color=tty'
 alias -- ls='ls --color=tty'
+alias -- dev='source ~/dev/bin/activate'
 
 if command -v bat &>/dev/null; then
     alias -- cat='bat'
 fi
 
-
 ######################
 # Applications
 ######################
 dsf () { diff -u "$@" | ~/.diff-so-fancy/diff-so-fancy | less; }
-sis () { sed -i "s|${1//\//\\/}|${2//\//\\/}|g" "$3"; }
-sid () { sed -i "/${1//\//\\/}/d" "$3"; }
 q () {
     [ -n "$VIRTUAL_ENV" ] && TMP_ENV="$VIRTUAL_ENV"
     source $HOME/dev/bin/activate
@@ -64,19 +57,13 @@ q () {
 # Git
 ######################
 # The choice of using an alias is to avoid having to type 'git' all the time
-# plus also some features require omz git plugin which is not usable in gitconfig
+alias -- gs='git status'
 alias -- gl='git lg'
 alias -- gla='git lga'
-alias -- g-extra='git status -s | grep -e "??" | awk2'
-alias -- g-root='git rev-parse --show-toplevel'
-
-# Useful for post-merge:
-# fetches and deletes the current branch unless it's not yet merged
-alias -- gbrd='git fetch && br=$(git_current_branch) && git co $(git_main_branch) && git branch -d $br'
 
 # Useful for pre-merge:
 # fetches and rebases the current branch on main, and removes [run_(ci|perf)] tags
-alias -- grbom='git fetch && git rebase origin/$(git_main_branch) && git submodule sync && git su'
+alias -- grbom='git fetch $(git_main_branch):$(git_main_branch) && git rebase origin/$(git_main_branch) && git submodule sync && git su'
 
 # Refresh dotfiles with remote
 alias -- dotfiles='cd ~/dotfiles && git stash && git pull && git stash pop'
@@ -85,12 +72,16 @@ alias -- dotfiles='cd ~/dotfiles && git stash && git pull && git stash pop'
 # VSCode
 ######################
 
-if [[ "$TERM_PROGRAM" == "vscode" ]]; then
+if [[ "$TERM_PROGRAM" == "vscode" || "$TERM_PROGRAM" == "tmux" ]]; then
     export EDITOR='code --wait'
-    export VISUAL='code --wait'
+    export VISUAL=$EDITOR
+    export GIT_EDITOR=$EDITOR
     export EDITOR_NB='code'
-    preexec() {                                                                                    
-        # Workaround for VSCode 'Unable to connect to VS Code server' error https://github.com/microsoft/vscode-remote-release/issues/6997
-        export VSCODE_IPC_HOOK_CLI=$(find /tmp -maxdepth 1 -name 'vscode-ipc-*' -exec ls -lt {} + | head -n 1 | awk '{print $NF}')
-    }
+    if [[ ! $OSTYPE == 'darwin'* ]]; then
+        preexec() {
+            # https://github.com/microsoft/vscode-remote-release/issues/2763#issuecomment-1298256900
+            socket=$(ls -1t /run/user/$UID/vscode-ipc-*.sock 2> /dev/null | head -1)
+            export VSCODE_IPC_HOOK_CLI=${socket}
+        }
+    fi
 fi

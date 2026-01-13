@@ -1,26 +1,26 @@
 #!/usr/bin/env python3
 
 from ctypes import *
-from optparse import OptionParser
+import argparse
 import re
-
-#import numpy as np
 
 defaults = {}
 defaults["num"] = '0x00000000'
 defaults["file"] = 'run.log'
 
-parser = OptionParser()
-parser.add_option("--file", dest="file", default=defaults["file"],
+parser = argparse.ArgumentParser(description='Floating point number analyzer')
+parser.add_argument("--file", dest="file", default=defaults["file"],
                     help="log file for analysis")
-parser.add_option("--num", dest="num", default=defaults["num"],
+parser.add_argument("--num", dest="num", default=defaults["num"],
                     help="fp number of bits for analysis")
-parser.add_option("-d", "--diff", dest="diff", action="store_true",
+parser.add_argument("-d", "--diff", dest="diff", action="store_true",
                     help="comparing two numbers")
-parser.add_option("--fp16", dest="fp16", action="store_true",
+parser.add_argument("--fp16", dest="fp16", action="store_true",
                     help="use fp16 format")
+parser.add_argument("args", nargs="*", help="numbers to analyze")
 
-(options, args) = parser.parse_args()
+options = parser.parse_args()
+args = options.args
 
 class colors:
     HEADER = '\033[94m'
@@ -57,7 +57,7 @@ class ufloat:
         try:
             float(value)
             return True
-        except:
+        except (ValueError, TypeError):
             return False
 
     def set_num_str(self, str, fp16=False):
@@ -136,13 +136,14 @@ def show_diff(lhs, rhs, fmt):
 
 def main():
     if (options.diff or len(args) == 2) :
+        # Auto-detect fp16 format from first argument
+        if re.match(r"0[xX][0-9a-fA-F]{4}$", args[0]):
+            options.fp16 = True
+
         num1 = ufloat()
         num1.set_num_str(args[0], options.fp16)
         num2 = ufloat()
         num2.set_num_str(args[1], options.fp16)
-
-        if re.match(r"0[xX][0-9a-fA-F]{4}$", arg):
-            options.fp16 = True
 
         summary = ""
         if (num1.exp() != num2.exp()):

@@ -22,8 +22,7 @@
 (ido-mode 1)
 (ido-everywhere)
 (setq ido-enable-flex-matching t)
-;TZ: fido-mode not working on emacs 26
-;(fido-mode)
+(fido-mode)
 
 ;; Show stray whitespace.
 (setq-default show-trailing-whitespace t)
@@ -61,10 +60,6 @@
 
 ;; Disable lockfiles.
 (setq create-lockfiles nil)
-
-;; Workaround for https://debbugs.gnu.org/34341 in GNU Emacs <= 26.3.
-(when (and (version< emacs-version "26.3") (>= libgnutls-version 30603))
-  (setq gnutls-algorithm-priority "NORMAL:-VERS-TLS1.3"))
 
 ;; Write customizations to a separate file instead of this file.
 (setq custom-file (expand-file-name "custom.el" user-emacs-directory))

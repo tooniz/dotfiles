@@ -37,6 +37,7 @@ if [ ! -d "$HOME/.ssh" ]; then
     mkdir -p "$HOME/.ssh"
     cp "$FROM/.ssh/id_ed25519" "$HOME/.ssh"
     cp "$FROM/.ssh/id_ed25519.pub" "$HOME/.ssh"
+    chmod 600 "$HOME/.ssh/id_ed25519"
     if [[ $OSTYPE == 'darwin'* ]]; then
         brew install ansible
     else
@@ -64,7 +65,7 @@ fi
 # Setup oh-my-zsh
 if [ ! -d "$HOME/.oh-my-zsh" ]; then
     echo "Setting up oh-my-zsh ..."
-    git clone https://github.com/robbyrussell/oh-my-zsh.git "$HOME/.oh-my-zsh"
+    git clone https://github.com/ohmyzsh/ohmyzsh.git "$HOME/.oh-my-zsh"
     git clone https://github.com/zsh-users/zsh-syntax-highlighting.git "$HOME/.oh-my-zsh/custom/plugins/zsh-syntax-highlighting"
 fi
 
@@ -118,9 +119,10 @@ if ! command -v clang-format &>/dev/null; then
     fi
 fi
 
-if [[ $OSTYPE == 'darwin'* ]]; then
-    if ! command -v glow &>/dev/null; then
-        echo "y" | brew install glow
+# Setup glow (markdown renderer)
+if ! command -v glow &>/dev/null; then
+    if [[ $OSTYPE == 'darwin'* ]]; then
+        brew install glow
     else
         sudo mkdir -p /etc/apt/keyrings
         curl -fsSL https://repo.charm.sh/apt/gpg.key | sudo gpg --dearmor -o /etc/apt/keyrings/charm.gpg
@@ -137,7 +139,6 @@ if [ ! -d "$HOME/dev" ]; then
 fi
 
 # Link dotfiles
-symlink ".taalasrc"
 symlink ".utilrc"
 symlink ".bashrc"
 symlink ".zshrc"

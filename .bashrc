@@ -124,9 +124,6 @@ PS_COLOR="31m"
 if [ "$HOST" == "nextstep" ]; then PS_COLOR="34m"; fi
 PS1="\[\e]0;\w\a\] \n[\!] \[\033[31;$PS_COLOR\]\u:\h\[\033[32m\] \w\[\033[30m\]\[\033[1;33m\] > \[\033[0m\]"
 
-# Colors for ls command
-LS_COLORS='di=1:fi=0:ln=31:pi=5:so=5:bd=5:cd=5:or=31:mi=0:ex=35:*.rpm=90'
-export LS_COLORS
 alias ll='ls -al -G'
 
 # So you can quickly print a column by piping through one of the awkN-s
@@ -141,9 +138,7 @@ export EDITOR="$VISUAL"
 export TIME="TIME REPORT - K: %K KB,    M: %M KB,     CPU: %P,    Time: %e seconds"
 alias hless='history | less'
 alias gs='git status'
-alias dock='docker exec -it --user tzhou special-tzhou zsh'
 alias deck='sudo service docker start && sudo chmod 666 /var/run/docker.sock'
-alias setsh='sudo chsh -s $(which zsh) tzhou'
 
 # List all git extra files (that could be removed)
 alias g-extra='git status -s | grep -e "??" | awk2'
@@ -151,30 +146,9 @@ alias g-root='git rev-parse --show-toplevel'
 alias g-parent='git log --pretty=%P -n 1'
 alias g-which-branch='git branch -a --contains'
 
-# Log all commands ran on this machine
-export PROMPT_COMMAND='if [ "$(id -u)" -ne 0 ]; then echo "$(date "+%Y-%m-%d.%H:%M:%S") $(pwd) $(history 1)" >> ~/.logs/bash-history-$(date "+%Y-%m-%d").log; fi'
 
 alias x='exit'
 
 
 [ -f ~/.fzf.bash ] && source ~/.fzf.bash
-# put this in .profile instead
-# zsh
-
-# >>> conda initialize >>>
-# !! Contents within this block are managed by 'conda init' !!
-__conda_setup="$('/proj_sw/tzhou/miniconda3/bin/conda' 'shell.bash' 'hook' 2> /dev/null)"
-if [ $? -eq 0 ]; then
-    eval "$__conda_setup"
-else
-    if [ -f "/proj_sw/tzhou/miniconda3/etc/profile.d/conda.sh" ]; then
-        . "/proj_sw/tzhou/miniconda3/etc/profile.d/conda.sh"
-    else
-        export PATH="/proj_sw/tzhou/miniconda3/bin:$PATH"
-    fi
-fi
-unset __conda_setup
-# <<< conda initialize <<<
-
-[ -f ~/.ttrc ] && source ~/.ttrc
 [ -f ~/.utilrc ] && source ~/.utilrc

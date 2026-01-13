@@ -7,10 +7,12 @@ export ZSH="$HOME/.oh-my-zsh"
 # Change location of zcompdump cache
 export ZSH_COMPDUMP=$ZSH/cache/.zcompdump-$HOST
 
-# Set name of the theme to load --- if set to "random", it will
-# load a random theme each time oh-my-zsh is loaded, in which case,
-# to know which specific one was loaded, run: echo $RANDOM_THEME
-# See https://github.com/robbyrussell/oh-my-zsh/wiki/Themes
+# Disable oh-my-zsh auto-update check (saves ~0.1s per shell)
+DISABLE_AUTO_UPDATE=true
+
+# Skip compinit security audit (only run once per day)
+ZSH_DISABLE_COMPFIX=true
+
 ZSH_THEME="robbyrussell"
 
 ######################
@@ -47,7 +49,7 @@ export LESS="-F -X $LESS"
 ######################
 # Shell
 ######################
-setopt CORRECT                  # Enable auto-correct ls *(<tab> for globbing options
+# setopt CORRECT                # Disabled: prompts "correct X to Y?" which feels clunky
 setopt extendedglob             # Enable extended-globbing
 autoload -U colors              # Enable colors
 colors

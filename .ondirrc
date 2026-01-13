@@ -1,6 +1,3 @@
-
-enter /home/tzhou/([^/]+)
-	source ~/bin/ondir_enter
-
-enter /Users/tozhou/work/([^/]+)
+# Trigger ondir_enter when entering project directories
+enter /Users/tozhou/([^/]+)
 	source ~/bin/ondir_enter

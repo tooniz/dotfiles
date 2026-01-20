@@ -8,10 +8,10 @@
 # for ssh logins, install and configure the libpam-umask package.
 #umask 022
 
-# if zsh is not the default shell
+# if zsh is not the default shell, switch to it
 if [ "$SHELL" != "/usr/bin/zsh" ]; then
-    if which zsh > /dev/null; then
-        zsh
+    if command -v zsh > /dev/null; then
+        exec zsh
     fi
 fi
 
@@ -36,6 +36,6 @@ fi
 # Bash init scripts (for compatibility)
 if [ -d /etc/profile.d ]; then
     for file in /etc/profile.d/*.sh; do
-        source "$file"
+        [ -r "$file" ] && source "$file"
     done
 fi

@@ -19,7 +19,7 @@ ZSH_THEME="robbyrussell"
 # Plugins
 ######################
 
-plugins=(git)
+plugins=(git zsh-syntax-highlighting zsh-autosuggestions)
 
 source $ZSH/oh-my-zsh.sh
 
@@ -61,6 +61,7 @@ export EDITOR_NB='vim'
 
 [ -f ~/.utilrc ] && source ~/.utilrc
 [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
+command -v zoxide &>/dev/null && eval "$(zoxide init zsh)"
 
 ######################
 # Auto File Open

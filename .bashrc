@@ -121,7 +121,7 @@ fi
 # 
 # Prompt
 PS_COLOR="31m"
-if [ "$HOST" == "nextstep" ]; then PS_COLOR="34m"; fi
+if [ "$HOSTNAME" == "nextstep" ]; then PS_COLOR="34m"; fi
 PS1="\[\e]0;\w\a\] \n[\!] \[\033[31;$PS_COLOR\]\u:\h\[\033[32m\] \w\[\033[30m\]\[\033[1;33m\] > \[\033[0m\]"
 
 alias ll='ls -al -G'

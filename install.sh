@@ -1,4 +1,5 @@
 #!/bin/bash
+set -e
 
 # Get the absolute path of the current script
 SCRIPT_PATH=$(realpath "$0")
@@ -59,7 +60,11 @@ fi
 
 # Setup tmux
 if ! command -v tmux &>/dev/null; then
-    echo "y" | sudo apt-get install tmux
+    if [[ $OSTYPE == 'darwin'* ]]; then
+        brew install tmux
+    else
+        echo "y" | sudo apt-get install tmux
+    fi
 fi
 
 # Setup oh-my-zsh
@@ -67,6 +72,7 @@ if [ ! -d "$HOME/.oh-my-zsh" ]; then
     echo "Setting up oh-my-zsh ..."
     git clone https://github.com/ohmyzsh/ohmyzsh.git "$HOME/.oh-my-zsh"
     git clone https://github.com/zsh-users/zsh-syntax-highlighting.git "$HOME/.oh-my-zsh/custom/plugins/zsh-syntax-highlighting"
+    git clone https://github.com/zsh-users/zsh-autosuggestions.git "$HOME/.oh-my-zsh/custom/plugins/zsh-autosuggestions"
 fi
 
 # Setup fzf
@@ -83,30 +89,28 @@ if [ ! -d "$HOME/.diff-so-fancy" ]; then
 fi
 
 # Setup fd
-if ! command -v fdfind &>/dev/null; then
-    if ! command -v fd &>/dev/null; then
-        echo "Setting up fd ..."
-        if [[ $OSTYPE == 'darwin'* ]]; then
-            brew install fd
-        else
-            sudo apt-get install fd-find
-        fi
-        if [ ! -f "$LOCAL_BIN/fd" ]; then
+if ! command -v fdfind &>/dev/null && ! command -v fd &>/dev/null; then
+    echo "Setting up fd ..."
+    if [[ $OSTYPE == 'darwin'* ]]; then
+        brew install fd
+    else
+        echo "y" | sudo apt-get install fd-find
+        # Symlink fdfind to fd on Linux
+        if [ ! -f "$LOCAL_BIN/fd" ] && command -v fdfind &>/dev/null; then
             ln -s "$(which fdfind)" "$LOCAL_BIN/fd"
         fi
     fi
 fi
 
 # Setup bat
-if ! command -v batcat &>/dev/null; then
-    if ! command -v bat &>/dev/null; then
-        echo "Setting up bat ..."
-        if [[ $OSTYPE == 'darwin'* ]]; then
-            echo "y" | brew install bat
-        else
-            echo "y" | sudo apt-get install bat
-        fi
-        if [ ! -f "$LOCAL_BIN/bat" ]; then
+if ! command -v batcat &>/dev/null && ! command -v bat &>/dev/null; then
+    echo "Setting up bat ..."
+    if [[ $OSTYPE == 'darwin'* ]]; then
+        brew install bat
+    else
+        echo "y" | sudo apt-get install bat
+        # Symlink batcat to bat on Linux
+        if [ ! -f "$LOCAL_BIN/bat" ] && command -v batcat &>/dev/null; then
             ln -s "$(which batcat)" "$LOCAL_BIN/bat"
         fi
     fi
@@ -116,6 +120,15 @@ fi
 if ! command -v clang-format &>/dev/null; then
     if [[ ! $OSTYPE == 'darwin'* ]]; then
         echo "y" | sudo apt-get install clang-format
+    fi
+fi
+
+# Setup zoxide
+if ! command -v zoxide &>/dev/null; then
+    if [[ $OSTYPE == 'darwin'* ]]; then
+        brew install zoxide
+    else
+        curl -sSfL https://raw.githubusercontent.com/ajeetdsouza/zoxide/main/install.sh | sh
     fi
 fi
 
@@ -147,6 +160,7 @@ symlink ".ondirrc"
 symlink ".colorsrc"
 symlink ".emacs"
 symlink ".gitconfig"
+symlink ".tmux.conf"
 symlink "bin"
 
 # Link large directories from shared network drive

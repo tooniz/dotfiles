@@ -1,7 +1,7 @@
 ######################
 # Environment
 ######################
-export CCACHE=$(which ccache)
+export CCACHE=$(command -v ccache 2>/dev/null)
 export PATH="/usr/lib/ccache:$PATH"
 
 export FZF_TMUX=1
@@ -33,9 +33,17 @@ alias -- ll='ls -l --color=tty'
 alias -- ls='ls --color=tty'
 alias -- dev='source ~/dev/bin/activate'
 
-if command -v bat &>/dev/null; then
-    alias -- cat='bat'
-fi
+# Smart cat: glow for markdown, bat for everything else
+cat() {
+    local last_arg="${@: -1}"
+    if [[ "$last_arg" == *.md ]] && command -v glow &>/dev/null; then
+        glow "$last_arg"
+    elif command -v bat &>/dev/null; then
+        bat "$@"
+    else
+        command cat "$@"
+    fi
+}
 
 ######################
 # Applications
@@ -59,7 +67,7 @@ fi
 
 # Useful for pre-merge:
 # fetches and rebases the current branch on main, and removes [run_(ci|perf)] tags
-alias -- grbom='git fetch $(git_main_branch):$(git_main_branch) && git rebase origin/$(git_main_branch) && git submodule sync && git su'
+alias -- grbom='git fetch origin $(git_main_branch):$(git_main_branch) && git rebase origin/$(git_main_branch) && git submodule sync && git su'
 
 # Refresh dotfiles with remote
 alias -- dotfiles='cd ~/dotfiles && git stash && git pull && git stash pop'

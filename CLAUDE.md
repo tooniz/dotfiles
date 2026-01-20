@@ -13,9 +13,10 @@ This is a personal dotfiles repository for macOS and Linux systems. It contains 
 ```
 
 The install script:
-- Symlinks dotfiles (`.zshrc`, `.bashrc`, `.gitconfig`, etc.) from this repo to `$HOME`
+- Symlinks dotfiles (`.zshrc`, `.bashrc`, `.gitconfig`, `.tmux.conf`, etc.) from this repo to `$HOME`
 - Sets up SSH keys and API secrets (encrypted with ansible-vault)
-- Installs dependencies: oh-my-zsh, fzf, diff-so-fancy, fd, bat, tmux
+- Installs dependencies: oh-my-zsh, fzf, diff-so-fancy, fd, bat, tmux, zoxide, glow
+- Installs zsh plugins: zsh-syntax-highlighting, zsh-autosuggestions
 - Creates a Python virtual environment at `$HOME/dev` with packages from `requirements.txt`
 
 ## Structure
@@ -23,18 +24,45 @@ The install script:
 - **Shell configs**: `.zshrc` (primary), `.bashrc`, `.profile` - sources `.utilrc` for shared aliases
 - **`.utilrc`**: Shared aliases and functions used by both bash and zsh
 - **`.workrc`**: Project-specific environment variables and debug toggles (`dbgon`/`dbgoff`)
-- **`.gitconfig`**: Git aliases including `lg`, `lga`, `pb`, `sync`, `su`
+- **`.gitconfig`**: Git aliases and settings (rerere, autoSetupRemote enabled)
+- **`.tmux.conf`**: Minimal tmux config (mouse, vim splits, no escape delay)
+- **`.colorsrc`**: LS_COLORS configuration
 - **`bin/`**: Utility scripts added to PATH
-  - `query.py`: LLM query tool using Groq API (aliased as `q` function)
+  - `fpmath.py`: Floating-point number analyzer for hardware development
   - `ondir`/`ondir_osx`: Directory-change triggers
 
 ## Key Aliases
 
-- `q <prompt>`: Query Groq LLM (requires `GROQ_API_KEY` in `.secrets`)
-- `dev`: Activate the `$HOME/dev` Python virtualenv
-- `dotfiles`: Pull latest dotfiles from remote
-- `dsf`: Diff with diff-so-fancy formatting
-- `grbom`: Fetch, rebase on main, and sync submodules
+| Alias | Description |
+|-------|-------------|
+| `c` | `cd ..` |
+| `x` | `exit` |
+| `t <name>` | `tmux attach -d -t <name>` |
+| `dev` | Activate `$HOME/dev` Python virtualenv |
+| `cat` | Smart cat: uses `glow` for `.md` files, `bat` otherwise |
+| `gs` | `git status` |
+| `gl` | `git lg` (pretty log) |
+| `grbom` | Fetch origin, rebase on main, sync submodules |
+| `dotfiles` | Pull latest dotfiles from remote |
+| `dsf` | Diff with diff-so-fancy formatting |
+| `z <path>` | zoxide smart directory jump |
+
+## Git Config
+
+Key settings in `.gitconfig`:
+- `rerere.enabled = true`: Remembers conflict resolutions
+- `push.autoSetupRemote = true`: No need for `--set-upstream`
+- `pull.rebase = true`: Rebase on pull by default
+- Aliases: `lg`, `lga`, `pb`, `cm`, `co`, `cob`, `sync`, `su`
+
+## Tmux
+
+Minimal config in `.tmux.conf`:
+- Mouse support enabled
+- Windows start at 1
+- No escape delay (for vim)
+- Split with `|` and `-` (preserves current directory)
+- Vi copy mode
 
 ## Secrets
 

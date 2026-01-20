@@ -1,13 +1,11 @@
 #!/usr/bin/env bash
 
-ROOT=`git rev-parse --show-toplevel`
-export MOD_HOME=$ROOT
+ROOT=$(git rev-parse --show-toplevel)
 export PYTHONPATH=$ROOT
 
 [ -f $HOME/dev/bin/activate ] && source $HOME/dev/bin/activate
 [ -f shared/local_setup.sh ] && source shared/local_setup.sh
 
 git status -sb
-echo "\n Environment Variables:"
-echo " - CONFIG=$CONFIG"
-echo "\n \033[0;35m Changed MOD_HOME to $ROOT ... \033[0m \n"
+git log -1 --format=' %C(yellow)%h%C(reset) %s %C(green)(%ar)%C(reset)'
+[ -n "$VIRTUAL_ENV" ] && echo " \033[0;35mvenv: $VIRTUAL_ENV\033[0m"

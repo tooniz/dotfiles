@@ -75,10 +75,6 @@ done
 # Functions
 ######################
 
-if [[ $(uname) == "Darwin" ]]; then
-    alias ondir='ondir_osx'
-fi
-
 # Directory triggers for ondir
 eval_ondir() {
   eval "`ondir \"$OLDPWD\" \"$PWD\"`"

@@ -22,6 +22,7 @@ alias -- awk5='awk "{ print \$5 }"'
 
 # Single letter aliases better be commonly used
 alias -- c='builtin cd ..'
+alias -- d='command -v deactivate &>/dev/null && deactivate'
 alias -- x='exit'
 alias -- t='tmux attach -d -t'
 

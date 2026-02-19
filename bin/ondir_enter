@@ -1,22 +1,19 @@
 #!/usr/bin/env bash
 
-#!/usr/bin/env bash
-
-export GIT_ROOT=`git rev-parse --show-toplevel`
+export GIT_ROOT=$(git rev-parse --show-toplevel)
 export ROOT=$GIT_ROOT
 export PYTHONPATH=$ROOT
 
-if [ -f $ROOT/.venv/bin/activate ]; then
+if [ -f "$ROOT/.venv/bin/activate" ]; then
     echo "Using virtual env \033[0;35m $ROOT/.venv \033[0m \n"
     source $ROOT/.venv/bin/activate
-elif [ -f $HOME/dev/bin/activate ]; then
+elif [ -f "$HOME/dev/bin/activate" ]; then
     echo "Using virtual env \033[0;35m $HOME/dev \033[0m \n"
     source $HOME/dev/bin/activate
 fi
 
-if [ -f shared/local_setup.sh ]; then
-    echo "Using virtual env created from shared/local_setup.sh"
-    source shared/local_setup.sh
+if [ -f "$ROOT/shared/local_setup.sh" ]; then
+    source "$ROOT/shared/local_setup.sh"
 fi
 
 if [ -d ".git" ]; then

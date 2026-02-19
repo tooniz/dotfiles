@@ -15,6 +15,10 @@ fi
 symlink() {
     local from_path="$FROM/$1"
     local home_path="$HOME/$1"
+    if [ ! -e "$from_path" ]; then
+        echo "Skipping $1 (missing in repo)"
+        return
+    fi
     echo "Linking $1 ..."
     rm -rf "$home_path"
     ln -s "$from_path" "$home_path"
@@ -42,7 +46,7 @@ if [ ! -d "$HOME/.ssh" ]; then
     if [[ $OSTYPE == 'darwin'* ]]; then
         brew install ansible
     else
-        echo "y" | sudo apt-get install ansible
+        sudo apt-get install -y ansible
     fi
     ansible-vault decrypt "$HOME/.ssh/id_ed25519"
 fi
@@ -53,7 +57,7 @@ if [ ! -f "$HOME/.secrets" ]; then
     if [[ $OSTYPE == 'darwin'* ]]; then
         brew install ansible
     else
-        echo "y" | sudo apt-get install ansible
+        sudo apt-get install -y ansible
     fi
     ansible-vault decrypt "$HOME/.secrets"
 fi
@@ -63,8 +67,13 @@ if ! command -v tmux &>/dev/null; then
     if [[ $OSTYPE == 'darwin'* ]]; then
         brew install tmux
     else
-        echo "y" | sudo apt-get install tmux
+        sudo apt-get install -y tmux
     fi
+fi
+
+# Setup uv
+if ! command -v uv &>/dev/null; then
+    curl -LsSf https://astral.sh/uv/install.sh | sh
 fi
 
 # Setup oh-my-zsh
@@ -94,7 +103,7 @@ if ! command -v fdfind &>/dev/null && ! command -v fd &>/dev/null; then
     if [[ $OSTYPE == 'darwin'* ]]; then
         brew install fd
     else
-        echo "y" | sudo apt-get install fd-find
+        sudo apt-get install -y fd-find
         # Symlink fdfind to fd on Linux
         if [ ! -f "$LOCAL_BIN/fd" ] && command -v fdfind &>/dev/null; then
             ln -s "$(which fdfind)" "$LOCAL_BIN/fd"
@@ -108,7 +117,7 @@ if ! command -v batcat &>/dev/null && ! command -v bat &>/dev/null; then
     if [[ $OSTYPE == 'darwin'* ]]; then
         brew install bat
     else
-        echo "y" | sudo apt-get install bat
+        sudo apt-get install -y bat
         # Symlink batcat to bat on Linux
         if [ ! -f "$LOCAL_BIN/bat" ] && command -v batcat &>/dev/null; then
             ln -s "$(which batcat)" "$LOCAL_BIN/bat"
@@ -119,7 +128,7 @@ fi
 # Setup clang-format
 if ! command -v clang-format &>/dev/null; then
     if [[ ! $OSTYPE == 'darwin'* ]]; then
-        echo "y" | sudo apt-get install clang-format
+        sudo apt-get install -y clang-format
     fi
 fi
 
@@ -161,6 +170,7 @@ symlink ".colorsrc"
 symlink ".emacs"
 symlink ".gitconfig"
 symlink ".tmux.conf"
+symlink ".workrc"
 symlink "bin"
 
 # Link large directories from shared network drive

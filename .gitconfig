@@ -13,7 +13,7 @@
 	cob = checkout -b
 	root = rev-parse --show-toplevel
 	su = submodule update --init --recursive
-	sync = !git pull && git submodule sync && git su
+	sync = !git pull && git su
 	patch = !git --no-pager diff --no-color
 [rerere]
 	enabled = true
@@ -24,8 +24,6 @@
 [core]
 	editor = vim
 	pager = ~/.diff-so-fancy/diff-so-fancy | less --tabs=4 -RFX
-[credential]
-	helper = cache
 [interactive]
 	diffFilter = ~/.diff-so-fancy/diff-so-fancy --patch
 [color "diff-highlight"]
@@ -45,4 +43,4 @@
 	clean = git-lfs clean -- %f
 	smudge = git-lfs smudge -- %f
 	process = git-lfs filter-process
-	required = true
+	required = false

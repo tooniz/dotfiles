@@ -1,6 +1,6 @@
 # Trigger ondir_enter when entering project directories
-enter /Users/tzhou/work/([^/]+)
+enter /home/tzhou/work/([^/]+)
 	source ~/bin/ondir_enter
 
-leave /Users/tzhou/work/([^/]+)
+leave /home/tzhou/work/([^/]+)
 	command -v deactivate &>/dev/null && deactivate

@@ -1,18 +1,12 @@
 ######################
 # Dev dev dev
 ######################
-export ROOT="$HOME"
+export FAST=1
+export TRACE=1
 
 dbgon() {
-    export CONFIG=debug
-    export VERBOSITY=DEBUG
-    export LOGGER_LEVEL="$VERBOSITY"
-    export LOGURU_LEVEL="$VERBOSITY"
+    export LOGURU_LEVEL="DEBUG"
 }
 dbgoff() {
-    export CONFIG=release
-    unset LOGGER_LEVEL
-    unset LOGURU_LEVEL
+    export LOGURU_LEVEL="SUCCESS"
 }
-
-dbgon && eval "`ondir /`"

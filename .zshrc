@@ -80,10 +80,7 @@ eval_ondir() {
   eval "`ondir \"$OLDPWD\" \"$PWD\"`"
 }
 chpwd_functions=( eval_ondir $chpwd_functions )
+# Trigger ondir for initial directory (terminal opened already in a project)
+command -v ondir &>/dev/null && eval "`ondir / \"$PWD\"`"
 
-# bun completions
-[ -s "$HOME/.bun/_bun" ] && source "$HOME/.bun/_bun"
 
-# bun
-export BUN_INSTALL="$HOME/.bun"
-export PATH="$BUN_INSTALL/bin:$PATH"

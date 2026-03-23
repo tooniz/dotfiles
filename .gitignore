@@ -1,0 +1,21 @@
+# Cursor/AI local workspace state
+.cursor/
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Editor/IDE files
+.idea/
+.vscode/
+*.swp
+*.swo
+*~
+
+# Python cache/artifacts
+__pycache__/
+*.py[cod]
+.pytest_cache/
+
+# Logs and local temp output
+*.log

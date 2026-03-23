@@ -8,11 +8,9 @@
 # for ssh logins, install and configure the libpam-umask package.
 #umask 022
 
-# if zsh is not the default shell, switch to it
-if [ "$SHELL" != "/usr/bin/zsh" ]; then
-    if command -v zsh > /dev/null; then
-        exec zsh
-    fi
+# If current shell is not zsh, switch to whichever zsh is installed.
+if [ -z "$ZSH_VERSION" ] && command -v zsh > /dev/null; then
+    exec "$(command -v zsh)" -l
 fi
 
 # if running bash

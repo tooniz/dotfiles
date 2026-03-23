@@ -29,10 +29,10 @@ alias -- t='tmux attach -d -t'
 alias -- sz='source ~/.zshrc'
 alias -- jp='cd $ROOT'
 alias -- more='less'
-alias -- l.='ls -d .* -l --color=tty'
-alias -- ll='ls -l --color=tty'
-alias -- ls='ls --color=tty'
 alias -- dev='source ~/dev/bin/activate'
+alias -- ls='ls --color=auto'
+alias -- ll='ls -l --color=auto'
+alias -- l.='ls -d .* -l --color=auto'
 
 # Smart cat: glow for markdown, bat for everything else
 cat() {
@@ -70,8 +70,14 @@ fi
 # fetches and rebases the current branch on main, and removes [run_(ci|perf)] tags
 alias -- grbom='git fetch origin $(git_main_branch):$(git_main_branch) && git rebase origin/$(git_main_branch) && git submodule sync && git su'
 
-# Refresh dotfiles with remote
-alias -- dotfiles='cd ~/dotfiles && git stash && git pull && git stash pop'
+# Refresh dotfiles by rebasing on latest origin main branch.
+dotfiles() {
+    cd ~/dotfiles || return
+    local main_branch
+    main_branch="$(git_main_branch 2>/dev/null)"
+    [[ -z "$main_branch" ]] && main_branch="main"
+    git fetch origin "$main_branch" && git -c rebase.autoStash=true rebase "origin/$main_branch"
+}
 
 ######################
 # VSCode
@@ -82,11 +88,17 @@ if [[ "$TERM_PROGRAM" == "vscode" || "$TERM_PROGRAM" == "tmux" ]]; then
     export VISUAL=$EDITOR
     export GIT_EDITOR=$EDITOR
     export EDITOR_NB='code'
-    if [[ ! $OSTYPE == 'darwin'* ]]; then
-        preexec() {
-            # https://github.com/microsoft/vscode-remote-release/issues/2763#issuecomment-1298256900
-            socket=$(ls -1t /run/user/$UID/vscode-ipc-*.sock 2> /dev/null | head -1)
-            export VSCODE_IPC_HOOK_CLI=${socket}
-        }
-    fi
+fi
+
+# Launch code with vscode IPC socket on Linux.
+if [[ ! $OSTYPE == 'darwin'* ]]; then
+    code() {
+        local socket
+        socket=$(ls -1t /run/user/$UID/vscode-ipc-*.sock 2>/dev/null | head -1)
+        if [[ -n "$socket" ]]; then
+            VSCODE_IPC_HOOK_CLI="$socket" command code "$@"
+        else
+            command code "$@"
+        fi
+    }
 fi

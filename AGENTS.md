@@ -40,18 +40,24 @@ The install script:
 | Name | Description |
 |------|-------------|
 | `c` | `cd ..` |
+| `a` | Activate local `.venv` (`.venv/bin/activate`) |
 | `x` | `exit` |
 | `t <name>` | `tmux attach -d -t <name>` |
+| `ts [root]` | Fuzzy-select project and create/attach tmux session |
 | `dev` | Activate `$HOME/dev` virtualenv |
+| `e <path>` | Open path in `code` (fallback to editor) |
+| `ee` | Open current git repo root in editor |
+| `ff` | Fuzzy-pick file and open |
+| `gb` | Fuzzy-pick git branch and switch |
 | `cat()` | Smart cat: `glow` for `.md`, `bat` otherwise |
 | `gs` | `git status` |
 | `gl` | `git lg` |
 | `grbom` | Fetch/rebase on origin main branch + sync submodules |
-| `dotfiles` | Refresh dotfiles repo from remote via stash/pull/pop |
+| `dotfiles` | Rebase local dotfiles branch onto latest `origin/<main>` with autostash |
 | `dsf` | `diff` piped through diff-so-fancy |
 
 `zoxide` is initialized in `.zshrc`, so `z <path>` is available when installed.
-`ls` aliases in `.utilrc` are GNU/BSD compatible for Linux and macOS.
+`ls` aliases in `.utilrc` currently use GNU-style color flags.
 
 ## Git Config Highlights
 

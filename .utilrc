@@ -23,6 +23,7 @@ alias -- awk5='awk "{ print \$5 }"'
 # Single letter aliases better be commonly used
 alias -- c='builtin cd ..'
 alias -- d='command -v deactivate &>/dev/null && deactivate'
+alias -- a='[ -f .venv/bin/activate ] && source .venv/bin/activate'
 alias -- x='exit'
 alias -- t='tmux attach -d -t'
 
@@ -33,6 +34,30 @@ alias -- dev='source ~/dev/bin/activate'
 alias -- ls='ls --color=auto'
 alias -- ll='ls -l --color=auto'
 alias -- l.='ls -d .* -l --color=auto'
+
+# Open file/dir in code when available, else editor fallback.
+e() {
+    if command -v code &>/dev/null; then
+        command code "$@"
+    else
+        "${EDITOR_NB:-vim}" "$@"
+    fi
+}
+
+# Open current repo root (or cwd when not in a repo).
+ee() {
+    local target
+    target=$(git rev-parse --show-toplevel 2>/dev/null || pwd)
+    e "$target"
+}
+
+# Pick a file with fzf and open it.
+ff() {
+    command -v fzf &>/dev/null || return 1
+    local file
+    file=$(fzf)
+    [[ -n "$file" ]] && e "$file"
+}
 
 # Smart cat: glow for markdown, bat for everything else
 cat() {
@@ -77,6 +102,48 @@ dotfiles() {
     main_branch="$(git_main_branch 2>/dev/null)"
     [[ -z "$main_branch" ]] && main_branch="main"
     git fetch origin "$main_branch" && git -c rebase.autoStash=true rebase "origin/$main_branch"
+}
+
+# oh-my-zsh git plugin defines `gb`; clear it before function definition.
+unalias gb 2>/dev/null
+
+# Fuzzy-pick a branch and switch to it.
+gb() {
+    command -v fzf &>/dev/null || return 1
+    local branch
+    branch=$(
+        git for-each-ref --format='%(refname:short)' refs/heads refs/remotes 2>/dev/null \
+            | sed 's#^origin/##' \
+            | sort -u \
+            | fzf
+    )
+    [[ -z "$branch" ]] && return 0
+    if git show-ref --verify --quiet "refs/heads/$branch"; then
+        git switch "$branch"
+    else
+        git switch -c "$branch" --track "origin/$branch"
+    fi
+}
+
+# Fuzzy-pick a project and create/attach tmux session.
+ts() {
+    command -v tmux &>/dev/null || return 1
+    command -v fzf &>/dev/null || return 1
+    command -v fd &>/dev/null || return 1
+
+    local root target session
+    root="${1:-$HOME/work}"
+    [[ -d "$root" ]] || return 1
+
+    target=$(fd --type d --max-depth 2 . "$root" | fzf)
+    [[ -z "$target" ]] && return 0
+
+    session=$(basename "$target" | tr '.:' '__')
+    if tmux has-session -t "$session" 2>/dev/null; then
+        tmux attach -d -t "$session"
+    else
+        tmux new -s "$session" -c "$target"
+    fi
 }
 
 ######################

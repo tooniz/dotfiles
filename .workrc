@@ -1,8 +1,9 @@
 ######################
 # Dev dev dev
 ######################
-export FAST=1
-export TRACE=1
+export FAST=0
+export TRACE=0
+export GIT_EDITOR=vim
 
 dbgon() {
     export LOGURU_LEVEL="DEBUG"

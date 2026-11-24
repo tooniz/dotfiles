@@ -150,13 +150,6 @@ ts() {
 # VSCode
 ######################
 
-if [[ "$TERM_PROGRAM" == "vscode" || "$TERM_PROGRAM" == "tmux" ]]; then
-    export EDITOR='code --wait'
-    export VISUAL=$EDITOR
-    export GIT_EDITOR=$EDITOR
-    export EDITOR_NB='code'
-fi
-
 # Launch code with vscode IPC socket on Linux.
 if [[ ! $OSTYPE == 'darwin'* ]]; then
     code() {
